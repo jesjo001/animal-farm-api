@@ -6,7 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 import { env } from './config/env';
 import routes from './routes';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.middleware';
-import { apiRateLimiter } from './middlewares/rateLimiter.middleware';
+import { apiRateLimiter } from './middlewares/rateLimiter.middleware'; // Re-add apiRateLimiter import
 import logger from './config/logger';
 
 const app = express();
@@ -14,12 +14,12 @@ const app = express();
 // Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:8081'],
   credentials: true,
 }));
 
 // Rate limiting
-app.use(apiRateLimiter);
+app.use(apiRateLimiter); // Directly use apiRateLimiter
 
 // Body parsing
 app.use(express.json({ limit: '10mb' }));

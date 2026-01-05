@@ -9,6 +9,7 @@ const app_1 = __importDefault(require("./app"));
 const database_1 = __importDefault(require("./config/database"));
 const env_1 = require("./config/env");
 const logger_1 = __importDefault(require("./config/logger"));
+const scheduler_service_1 = require("./services/scheduler.service");
 const startServer = async () => {
     console.log("Starting server...");
     try {
@@ -26,6 +27,8 @@ const startServer = async () => {
                 logger_1.default.info(`API Documentation available at http://localhost:${env_1.env.PORT}/api-docs`);
             }
         });
+        // Start scheduled tasks
+        scheduler_service_1.SchedulerService.start();
         // Graceful shutdown
         process.on('SIGTERM', () => {
             logger_1.default.info('SIGTERM received, shutting down gracefully');

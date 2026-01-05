@@ -21,6 +21,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       throw new UnauthorizedError('Invalid token');
     }
 
+    console.log('Authenticated user:', user);
     req.user = user;
     req.tenantId = user.tenantId.toString();
     next();

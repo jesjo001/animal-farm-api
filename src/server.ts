@@ -4,6 +4,7 @@ import app from './app';
 import connectDB from './config/database';
 import { env } from './config/env';
 import logger from './config/logger';
+import { SchedulerService } from './services/scheduler.service';
 
 const startServer = async () => {
   console.log("Starting server...");
@@ -23,6 +24,9 @@ const startServer = async () => {
         logger.info(`API Documentation available at http://localhost:${env.PORT}/api-docs`);
       }
     });
+
+    // Start scheduled tasks
+    SchedulerService.start();
 
     // Graceful shutdown
     process.on('SIGTERM', () => {

@@ -8,6 +8,7 @@ import tenantRoutes from './tenant.routes';
 import eventRoutes from './event.routes';
 import transactionRoutes from './transaction.routes';
 import userRoutes from './user.routes';
+import locationRoutes from './location.routes';
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.use('/tenants', tenantRoutes);
 router.use('/events', eventRoutes);
 router.use('/transactions', transactionRoutes);
 router.use('/users', userRoutes);
+router.use('/locations', locationRoutes);
 
 // Health check
 router.get('/health', (req, res) => {

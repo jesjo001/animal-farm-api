@@ -100,4 +100,27 @@ export class NotificationService {
 
     await Promise.all(notifications);
   }
+
+  // Scheduled task methods
+  async sendDailyProductionReports(): Promise<void> {
+    // Implementation for sending daily production reports to all tenants
+    // This would typically involve querying all tenants and sending emails
+    // For now, just log
+    console.log('Sending daily production reports...');
+  }
+
+  async checkLowInventoryAlerts(): Promise<void> {
+    // Implementation for checking low inventory and sending alerts
+    console.log('Checking low inventory alerts...');
+  }
+
+  async sendWeeklySummaryReports(): Promise<void> {
+    // Implementation for sending weekly summary reports
+    console.log('Sending weekly summary reports...');
+  }
+
+  async sendMonthlyFinancialReports(): Promise<void> {
+    // Implementation for sending monthly financial reports
+    console.log('Sending monthly financial reports...');
+  }
 }

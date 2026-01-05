@@ -58,6 +58,25 @@ let NotificationService = class NotificationService {
         const notifications = users.map(user => this.createNotification(tenantId, user._id.toString(), 'success', 'Production Milestone', `Congratulations! ${totalEggs} eggs were collected on ${date.toDateString()}.`, { type: 'production', id: date.toISOString() }));
         await Promise.all(notifications);
     }
+    // Scheduled task methods
+    async sendDailyProductionReports() {
+        // Implementation for sending daily production reports to all tenants
+        // This would typically involve querying all tenants and sending emails
+        // For now, just log
+        console.log('Sending daily production reports...');
+    }
+    async checkLowInventoryAlerts() {
+        // Implementation for checking low inventory and sending alerts
+        console.log('Checking low inventory alerts...');
+    }
+    async sendWeeklySummaryReports() {
+        // Implementation for sending weekly summary reports
+        console.log('Sending weekly summary reports...');
+    }
+    async sendMonthlyFinancialReports() {
+        // Implementation for sending monthly financial reports
+        console.log('Sending monthly financial reports...');
+    }
 };
 exports.NotificationService = NotificationService;
 exports.NotificationService = NotificationService = __decorate([

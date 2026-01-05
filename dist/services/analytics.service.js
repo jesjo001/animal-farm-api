@@ -98,6 +98,19 @@ let AnalyticsService = class AnalyticsService {
             },
         };
     }
+    // Scheduled task methods
+    async generateDailyAnalytics() {
+        // Implementation for generating daily analytics reports
+        console.log('Generating daily analytics...');
+    }
+    async generateWeeklyAnalytics() {
+        // Implementation for generating weekly analytics reports
+        console.log('Generating weekly analytics...');
+    }
+    async generateMonthlyAnalytics() {
+        // Implementation for generating monthly analytics reports
+        console.log('Generating monthly analytics...');
+    }
 };
 exports.AnalyticsService = AnalyticsService;
 exports.AnalyticsService = AnalyticsService = __decorate([

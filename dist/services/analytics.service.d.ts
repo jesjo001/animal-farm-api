@@ -13,5 +13,8 @@ export declare class AnalyticsService {
     getFinancialTrends(tenantId: string, months?: number): Promise<any[]>;
     getEventTrends(tenantId: string, days?: number): Promise<any>;
     getDashboardData(tenantId: string): Promise<any>;
+    generateDailyAnalytics(): Promise<void>;
+    generateWeeklyAnalytics(): Promise<void>;
+    generateMonthlyAnalytics(): Promise<void>;
 }
 //# sourceMappingURL=analytics.service.d.ts.map

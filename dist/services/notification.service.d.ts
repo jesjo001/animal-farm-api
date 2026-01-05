@@ -15,5 +15,9 @@ export declare class NotificationService {
     sendLowFeedStockAlert(tenantId: string, feedType: string, currentQuantity: number): Promise<void>;
     sendMortalityAlert(tenantId: string, animalId: string, animalTag: string): Promise<void>;
     sendProductionMilestoneAlert(tenantId: string, totalEggs: number, date: Date): Promise<void>;
+    sendDailyProductionReports(): Promise<void>;
+    checkLowInventoryAlerts(): Promise<void>;
+    sendWeeklySummaryReports(): Promise<void>;
+    sendMonthlyFinancialReports(): Promise<void>;
 }
 //# sourceMappingURL=notification.service.d.ts.map

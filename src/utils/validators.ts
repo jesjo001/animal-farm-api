@@ -36,15 +36,12 @@ export const createEventSchema = z.object({
   cost: z.number().positive().optional(),
 });
 
-// Transaction validation schemas
-export const createTransactionSchema = z.object({
-  transactionType: z.enum(['income', 'expense']),
-  amount: z.number().positive(),
-  date: z.string().transform((str) => new Date(str)),
-  category: z.string().min(1),
-  productType: z.string().optional(),
+// Location validation schemas
+export const createLocationSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  type: z.enum(['barn', 'pen', 'field', 'coop', 'stable'], { required_error: 'Invalid location type' }),
+  capacity: z.number().int().positive('Capacity must be a positive number'),
   description: z.string().optional(),
-  animalId: z.string().optional(),
 });
 
 // Auth validation schemas

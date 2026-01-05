@@ -73,7 +73,6 @@ const tenantSchema = new mongoose_1.Schema({
     timestamps: true,
 });
 // Indexes
-tenantSchema.index({ email: 1 });
 tenantSchema.index({ isActive: 1 });
 const Tenant = mongoose_1.default.model('Tenant', tenantSchema);
 exports.default = Tenant;

@@ -53,7 +53,6 @@ const tenantSchema = new Schema<ITenant>({
 });
 
 // Indexes
-tenantSchema.index({ email: 1 });
 tenantSchema.index({ isActive: 1 });
 
 const Tenant = mongoose.model<ITenant>('Tenant', tenantSchema);

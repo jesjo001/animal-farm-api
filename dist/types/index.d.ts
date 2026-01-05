@@ -1,0 +1,79 @@
+export interface PaginationOptions {
+    page: number;
+    limit: number;
+}
+export interface PaginatedResponse<T> {
+    data: T[];
+    pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+    };
+}
+export interface CreateAnimalDTO {
+    tagNumber: string;
+    breed: string;
+    type: string;
+    birthDate: Date;
+    gender: 'male' | 'female';
+    location?: string;
+    healthStatus?: 'healthy' | 'sick' | 'injured' | 'deceased';
+    weight?: number;
+    notes?: string;
+}
+export interface CreateProductionDTO {
+    date: Date;
+    totalEggs: number;
+    gradeBreakdown: {
+        gradeA: number;
+        gradeB: number;
+        gradeC: number;
+        broken: number;
+    };
+    notes?: string;
+}
+export interface CreateEventDTO {
+    eventType: 'birth' | 'death' | 'vet_visit' | 'vaccination' | 'other';
+    date: Date;
+    animalId?: string;
+    count?: number;
+    description?: string;
+    cost?: number;
+}
+export interface CreateTransactionDTO {
+    transactionType: 'income' | 'expense';
+    amount: number;
+    date: Date;
+    category: string;
+    productType?: string;
+    description?: string;
+    animalId?: string;
+}
+export interface LoginDTO {
+    email: string;
+    password: string;
+}
+export interface RegisterDTO {
+    farmName: string;
+    ownerName: string;
+    email: string;
+    password: string;
+    phone?: string;
+    address?: string;
+}
+export interface ChangePasswordDTO {
+    currentPassword: string;
+    newPassword: string;
+}
+export interface ResetPasswordDTO {
+    token: string;
+    newPassword: string;
+}
+export interface JWTPayload {
+    userId: string;
+    tenantId: string;
+    role: string;
+    email: string;
+}
+//# sourceMappingURL=index.d.ts.map

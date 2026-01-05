@@ -78,3 +78,12 @@
 {"level":"info","message":"FarmFlow API server running on port 3000","service":"farmflow-backend","timestamp":"2026-01-05T01:56:47.594Z"}
 {"level":"info","message":"Environment: development","service":"farmflow-backend","timestamp":"2026-01-05T01:56:47.595Z"}
 {"level":"info","message":"API Documentation available at http://localhost:3000/api-docs","service":"farmflow-backend","timestamp":"2026-01-05T01:56:47.597Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"farmflow-backend","timestamp":"2026-01-05T02:47:09.414Z"}
+{"level":"info","message":"FarmFlow API server running on port 3000","service":"farmflow-backend","timestamp":"2026-01-05T02:47:09.425Z"}
+{"level":"info","message":"Environment: development","service":"farmflow-backend","timestamp":"2026-01-05T02:47:09.427Z"}
+{"level":"info","message":"API Documentation available at http://localhost:3000/api-docs","service":"farmflow-backend","timestamp":"2026-01-05T02:47:09.428Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"farmflow-backend","timestamp":"2026-01-05T02:49:03.544Z"}
+{"level":"info","message":"FarmFlow API server running on port 3000","service":"farmflow-backend","timestamp":"2026-01-05T02:49:03.556Z"}
+{"level":"info","message":"Environment: development","service":"farmflow-backend","timestamp":"2026-01-05T02:49:03.558Z"}
+{"level":"info","message":"API Documentation available at http://localhost:3000/api-docs","service":"farmflow-backend","timestamp":"2026-01-05T02:49:03.558Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"farmflow-backend","timestamp":"2026-01-05T02:50:49.909Z"}

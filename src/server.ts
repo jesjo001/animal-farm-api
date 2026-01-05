@@ -6,12 +6,17 @@ import { env } from './config/env';
 import logger from './config/logger';
 
 const startServer = async () => {
+  console.log("Starting server...");
   try {
     // Connect to database
+    console.log("Connecting to database...");
     await connectDB();
+    console.log("Database connected.");
 
     // Start server
+    console.log("Starting Express server...");
     const server = app.listen(env.PORT, () => {
+      console.log("Server started.");
       logger.info(`FarmFlow API server running on port ${env.PORT}`);
       logger.info(`Environment: ${env.NODE_ENV}`);
       if (env.API_DOCS_ENABLED) {
@@ -28,6 +33,7 @@ const startServer = async () => {
     });
 
   } catch (error) {
+    console.error("Error in startServer:", error);
     logger.error('Failed to start server:', error);
     process.exit(1);
   }

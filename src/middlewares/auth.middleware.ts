@@ -32,7 +32,18 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
 export const authorize = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    // Log the authorization attempt for debugging
+    if (req.user) {
+      console.log(
+        `Authorizing user ${req.user.email}. Role: "${req.user.role}" (length: ${req.user.role.length}). Required roles: [${roles.join(', ')}]`
+      );
+      const charCodes = req.user.role.split('').map(c => c.charCodeAt(0)).join(', ');
+      console.log(`Role char codes: [${charCodes}]`);
+    }
+
+    const userRole = req.user?.role?.trim(); // Trim potential whitespace
+
+    if (!req.user || !userRole || !roles.includes(userRole)) {
       const error = new UnauthorizedError('Insufficient permissions');
       next(error);
     } else {

@@ -1,4 +1,5 @@
 import { singleton } from 'tsyringe';
+import mongoose from 'mongoose';
 import Transaction, { ITransaction } from '../models/Transaction.model';
 import { BaseRepository } from './BaseRepository';
 
@@ -23,7 +24,7 @@ export class TransactionRepository extends BaseRepository<ITransaction> {
     const result = await this.model.aggregate([
       {
         $match: {
-          tenantId,
+          tenantId: new mongoose.Types.ObjectId(tenantId),
           transactionType: 'income',
           date: { $gte: startDate, $lte: endDate },
         },
@@ -43,7 +44,7 @@ export class TransactionRepository extends BaseRepository<ITransaction> {
     const result = await this.model.aggregate([
       {
         $match: {
-          tenantId,
+          tenantId: new mongoose.Types.ObjectId(tenantId),
           transactionType: 'expense',
           date: { $gte: startDate, $lte: endDate },
         },
@@ -65,7 +66,7 @@ export class TransactionRepository extends BaseRepository<ITransaction> {
     const result = await this.model.aggregate([
       {
         $match: {
-          tenantId: tenantId,
+          tenantId: new mongoose.Types.ObjectId(tenantId),
           date: { $gte: startDate, $lte: endDate },
         },
       },

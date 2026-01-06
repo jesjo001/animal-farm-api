@@ -36,7 +36,7 @@ const userSchema = new Schema<IUser>({
   },
   role: {
     type: String,
-    enum: ['tenant_admin', 'manager', 'worker'],
+    enum: ['tenant_admin', 'manager', 'worker', 'viewer'],
     default: 'worker',
   },
   isActive: {

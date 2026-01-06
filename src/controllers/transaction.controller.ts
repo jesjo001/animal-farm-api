@@ -16,6 +16,7 @@ export const getFinancialSummary = async (req: Request, res: Response, next: Nex
     
     const start = new Date(startDate as string);
     const end = new Date(endDate as string);
+    end.setHours(23, 59, 59, 999); // Set to the end of the day
     console.log('Parsed dates:', { start, end });
     
     const summary = await transactionService.getFinancialSummary(req.tenantId!, start, end);
@@ -35,7 +36,11 @@ export const getTransactions = async (req: Request, res: Response, next: NextFun
 
     if (req.query.transactionType) filters.transactionType = req.query.transactionType;
     if (req.query.startDate) filters.date = { $gte: new Date(req.query.startDate as string) };
-    if (req.query.endDate) filters.date = { ...filters.date, $lte: new Date(req.query.endDate as string) };
+    if (req.query.endDate) {
+      const end = new Date(req.query.endDate as string);
+      end.setHours(23, 59, 59, 999);
+      filters.date = { ...filters.date, $lte: end };
+    }
     if (req.query.category) filters.category = req.query.category;
     if (req.query.status) filters.status = req.query.status;
 

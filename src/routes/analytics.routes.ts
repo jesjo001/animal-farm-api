@@ -1,10 +1,5 @@
 import { Router } from 'express';
-import {
-  getKPIs,
-  getProductionTrends,
-  getFinancialTrends,
-  getEventTrends,
-} from '../controllers/analytics.controller';
+import { getFinancialSummary } from '../controllers/analytics.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 import { tenantContext } from '../middlewares/tenantContext.middleware';
 
@@ -14,9 +9,6 @@ const router = Router();
 router.use(authenticate);
 router.use(tenantContext);
 
-router.get('/kpis', getKPIs);
-router.get('/production-trends', getProductionTrends);
-router.get('/financial-trends', getFinancialTrends);
-router.get('/event-trends', getEventTrends);
+router.get('/financial-summary', getFinancialSummary);
 
 export default router;

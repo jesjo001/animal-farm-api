@@ -97,6 +97,31 @@ export class AuthService {
     return user;
   }
 
+  async getUsersByTenant(tenantId: string): Promise<any[]> {
+    return this.userRepository.find({ tenantId });
+  }
+  
+  async createUser(data: any): Promise<any> {
+    const { email, password, tenantId } = data;
+
+    // Check if user with email already exists in the tenant
+    const existingUser = await this.userRepository.findOne({ email, tenantId });
+    if (existingUser) {
+      throw new ConflictError('User with this email already exists in this farm');
+    }
+
+    // Hash password
+    const hashedPassword = await hashPassword(password);
+    
+    // Create user
+    const newUser = await this.userRepository.create({
+      ...data,
+      password: hashedPassword,
+    });
+
+    return newUser;
+  }
+
   async updateUser(userId: string, data: any): Promise<any> {
     const user = await this.getUserById(userId);
     const updatedUser = await this.userRepository.updateById(userId, data);

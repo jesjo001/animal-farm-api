@@ -4,57 +4,31 @@ import { container } from 'tsyringe';
 
 const analyticsService = container.resolve(AnalyticsService);
 
-export const getKPIs = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const kpis = await analyticsService.getKPIs(req.tenantId!);
+export const getFinancialSummary = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { period = '6months' } = req.query;
+        let startDate: Date;
+        const endDate = new Date();
 
-    res.json({
-      success: true,
-      data: kpis,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+        switch (period) {
+            case '1month':
+                startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 1, endDate.getDate());
+                break;
+            case '3months':
+                startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 3, endDate.getDate());
+                break;
+            case '1year':
+                startDate = new Date(endDate.getFullYear() - 1, endDate.getMonth(), endDate.getDate());
+                break;
+            case '6months':
+            default:
+                startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 6, endDate.getDate());
+                break;
+        }
 
-export const getProductionTrends = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const days = parseInt(req.query.days as string) || 30;
-    const trends = await analyticsService.getProductionTrends(req.tenantId!, days);
-
-    res.json({
-      success: true,
-      data: trends,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getFinancialTrends = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const months = parseInt(req.query.months as string) || 12;
-    const trends = await analyticsService.getFinancialTrends(req.tenantId!, months);
-
-    res.json({
-      success: true,
-      data: trends,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getEventTrends = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const days = parseInt(req.query.days as string) || 30;
-    const trends = await analyticsService.getEventTrends(req.tenantId!, days);
-
-    res.json({
-      success: true,
-      data: trends,
-    });
-  } catch (error) {
-    next(error);
-  }
+        const summary = await analyticsService.getFinancialSummary(req.tenantId!, startDate, endDate);
+        res.json({ success: true, data: summary });
+    } catch (error) {
+        next(error);
+    }
 };

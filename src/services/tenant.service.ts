@@ -16,5 +16,9 @@ export class TenantService {
     return this.tenantRepository.findById(id);
   }
 
+  async updateTenant(id: string, data: any) {
+    return this.tenantRepository.updateById(id, data);
+  }
+
   // Add other tenant-related methods
 }

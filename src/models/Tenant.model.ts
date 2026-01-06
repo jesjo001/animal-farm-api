@@ -7,6 +7,7 @@ export interface ITenant extends Document {
   email: string;
   phone?: string;
   address?: string;
+  currency: string;
   isActive: boolean;
   subscriptionPlan: 'free' | 'basic' | 'premium';
   createdAt: Date;
@@ -38,6 +39,10 @@ const tenantSchema = new Schema<ITenant>({
   address: {
     type: String,
     trim: true,
+  },
+  currency: {
+    type: String,
+    default: 'USD',
   },
   isActive: {
     type: Boolean,

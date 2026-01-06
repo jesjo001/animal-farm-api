@@ -1,7 +1,7 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 
 export interface ILocation extends Document {
-  tenantId: Schema.Types.ObjectId;
+  tenantId: Types.ObjectId;
   name: string;
   type: 'barn' | 'pen' | 'field' | 'coop' | 'stable';
   capacity: number;

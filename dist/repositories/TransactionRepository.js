@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionRepository = void 0;
 const tsyringe_1 = require("tsyringe");
+const mongoose_1 = __importDefault(require("mongoose"));
 const Transaction_model_1 = __importDefault(require("../models/Transaction.model"));
 const BaseRepository_1 = require("./BaseRepository");
 let TransactionRepository = class TransactionRepository extends BaseRepository_1.BaseRepository {
@@ -33,7 +34,7 @@ let TransactionRepository = class TransactionRepository extends BaseRepository_1
         const result = await this.model.aggregate([
             {
                 $match: {
-                    tenantId,
+                    tenantId: new mongoose_1.default.Types.ObjectId(tenantId),
                     transactionType: 'income',
                     date: { $gte: startDate, $lte: endDate },
                 },
@@ -51,7 +52,7 @@ let TransactionRepository = class TransactionRepository extends BaseRepository_1
         const result = await this.model.aggregate([
             {
                 $match: {
-                    tenantId,
+                    tenantId: new mongoose_1.default.Types.ObjectId(tenantId),
                     transactionType: 'expense',
                     date: { $gte: startDate, $lte: endDate },
                 },
@@ -66,10 +67,11 @@ let TransactionRepository = class TransactionRepository extends BaseRepository_1
         return result[0]?.total || 0;
     }
     async getFinancialSummary(tenantId, startDate, endDate) {
-        return this.model.aggregate([
+        console.log('getFinancialSummary repository called with:', { tenantId, startDate, endDate });
+        const result = await this.model.aggregate([
             {
                 $match: {
-                    tenantId,
+                    tenantId: new mongoose_1.default.Types.ObjectId(tenantId),
                     date: { $gte: startDate, $lte: endDate },
                 },
             },
@@ -81,6 +83,8 @@ let TransactionRepository = class TransactionRepository extends BaseRepository_1
                 },
             },
         ]);
+        console.log('Aggregation result:', result);
+        return result;
     }
 };
 exports.TransactionRepository = TransactionRepository;

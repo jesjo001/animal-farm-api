@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+export declare const getFinancialSummary: (req: Request, res: Response, next: NextFunction) => Promise<Response<any, Record<string, any>> | undefined>;
 export declare const getTransactions: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const createTransaction: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const getTransaction: (req: Request, res: Response, next: NextFunction) => Promise<void>;

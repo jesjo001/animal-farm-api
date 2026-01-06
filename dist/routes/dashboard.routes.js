@@ -11,5 +11,6 @@ router.use(tenantContext_middleware_1.tenantContext);
 router.get('/stats', dashboard_controller_1.getDashboardStats);
 router.get('/recent-activity', dashboard_controller_1.getRecentActivity);
 router.get('/production-chart', dashboard_controller_1.getProductionChart);
+router.get('/revenue-chart', dashboard_controller_1.getRevenueChart);
 exports.default = router;
 //# sourceMappingURL=dashboard.routes.js.map

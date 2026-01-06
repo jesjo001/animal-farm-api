@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPasswordSchema = exports.changePasswordSchema = exports.registerSchema = exports.loginSchema = exports.createTransactionSchema = exports.createEventSchema = exports.createProductionSchema = exports.createAnimalSchema = void 0;
+exports.resetPasswordSchema = exports.changePasswordSchema = exports.registerSchema = exports.loginSchema = exports.createLocationSchema = exports.createEventSchema = exports.createProductionSchema = exports.createAnimalSchema = void 0;
 const zod_1 = require("zod");
 // Animal validation schemas
 exports.createAnimalSchema = zod_1.z.object({
@@ -35,15 +35,12 @@ exports.createEventSchema = zod_1.z.object({
     description: zod_1.z.string().optional(),
     cost: zod_1.z.number().positive().optional(),
 });
-// Transaction validation schemas
-exports.createTransactionSchema = zod_1.z.object({
-    transactionType: zod_1.z.enum(['income', 'expense']),
-    amount: zod_1.z.number().positive(),
-    date: zod_1.z.string().transform((str) => new Date(str)),
-    category: zod_1.z.string().min(1),
-    productType: zod_1.z.string().optional(),
+// Location validation schemas
+exports.createLocationSchema = zod_1.z.object({
+    name: zod_1.z.string().min(1, 'Name is required'),
+    type: zod_1.z.enum(['barn', 'pen', 'field', 'coop', 'stable'], { required_error: 'Invalid location type' }),
+    capacity: zod_1.z.number().int().positive('Capacity must be a positive number'),
     description: zod_1.z.string().optional(),
-    animalId: zod_1.z.string().optional(),
 });
 // Auth validation schemas
 exports.loginSchema = zod_1.z.object({

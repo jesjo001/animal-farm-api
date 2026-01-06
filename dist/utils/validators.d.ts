@@ -93,30 +93,21 @@ export declare const createEventSchema: z.ZodObject<{
     count?: number | undefined;
     cost?: number | undefined;
 }>;
-export declare const createTransactionSchema: z.ZodObject<{
-    transactionType: z.ZodEnum<["income", "expense"]>;
-    amount: z.ZodNumber;
-    date: z.ZodEffects<z.ZodString, Date, string>;
-    category: z.ZodString;
-    productType: z.ZodOptional<z.ZodString>;
+export declare const createLocationSchema: z.ZodObject<{
+    name: z.ZodString;
+    type: z.ZodEnum<["barn", "pen", "field", "coop", "stable"]>;
+    capacity: z.ZodNumber;
     description: z.ZodOptional<z.ZodString>;
-    animalId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    date: Date;
-    transactionType: "income" | "expense";
-    amount: number;
-    category: string;
+    type: "barn" | "pen" | "field" | "coop" | "stable";
+    name: string;
+    capacity: number;
     description?: string | undefined;
-    animalId?: string | undefined;
-    productType?: string | undefined;
 }, {
-    date: string;
-    transactionType: "income" | "expense";
-    amount: number;
-    category: string;
+    type: "barn" | "pen" | "field" | "coop" | "stable";
+    name: string;
+    capacity: number;
     description?: string | undefined;
-    animalId?: string | undefined;
-    productType?: string | undefined;
 }>;
 export declare const loginSchema: z.ZodObject<{
     email: z.ZodString;

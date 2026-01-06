@@ -11,7 +11,7 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const env_1 = require("./config/env");
 const routes_1 = __importDefault(require("./routes"));
 const errorHandler_middleware_1 = require("./middlewares/errorHandler.middleware");
-const rateLimiter_middleware_1 = require("./middlewares/rateLimiter.middleware"); // Import createRateLimiter
+const rateLimiter_middleware_1 = require("./middlewares/rateLimiter.middleware"); // Re-add apiRateLimiter import
 const logger_1 = __importDefault(require("./config/logger"));
 const app = (0, express_1.default)();
 // Security middleware
@@ -21,7 +21,7 @@ app.use((0, cors_1.default)({
     credentials: true,
 }));
 // Rate limiting
-app.use((0, rateLimiter_middleware_1.createRateLimiter)());
+app.use(rateLimiter_middleware_1.apiRateLimiter); // Directly use apiRateLimiter
 // Body parsing
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));

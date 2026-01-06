@@ -14,6 +14,8 @@ export declare class AuthService {
         tokens: any;
     }>;
     getUserById(userId: string): Promise<any>;
+    getUsersByTenant(tenantId: string): Promise<any[]>;
+    createUser(data: any): Promise<any>;
     updateUser(userId: string, data: any): Promise<any>;
     changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void>;
 }

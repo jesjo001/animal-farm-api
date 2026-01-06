@@ -25,7 +25,7 @@ export const updateProfile = async (req: Request, res: Response, next: NextFunct
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await authService.getUsersByTenant(req.user!.tenantId);
+    const users = await authService.getUsersByTenant(req.tenantId!);
     const mappedUsers = users.map(user => ({
       ...user.toObject(),
       id: user._id.toString(),

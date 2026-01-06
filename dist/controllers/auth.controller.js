@@ -103,15 +103,7 @@ const getMe = async (req, res, next) => {
         const user = await getAuthService().getUserById(req.user._id.toString());
         res.json({
             success: true,
-            data: {
-                user: {
-                    id: user._id,
-                    name: user.name,
-                    email: user.email,
-                    role: user.role,
-                    tenantId: user.tenantId,
-                },
-            },
+            data: user,
         });
     }
     catch (error) {

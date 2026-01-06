@@ -9,6 +9,7 @@ const router = (0, express_1.Router)();
 router.use(auth_middleware_1.authenticate);
 router.use(tenantContext_middleware_1.tenantContext);
 router.get('/', transaction_controller_1.getTransactions);
+router.get('/summary', transaction_controller_1.getFinancialSummary);
 router.post('/', (0, auth_middleware_1.authorize)('tenant_admin', 'manager', 'accountant'), transaction_controller_1.createTransaction);
 router.get('/:id', transaction_controller_1.getTransaction);
 router.put('/:id', (0, auth_middleware_1.authorize)('tenant_admin', 'manager', 'accountant'), transaction_controller_1.updateTransaction);

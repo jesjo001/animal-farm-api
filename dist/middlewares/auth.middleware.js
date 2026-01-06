@@ -17,6 +17,7 @@ const authenticate = async (req, res, next) => {
         if (!user || !user.isActive) {
             throw new errors_1.UnauthorizedError('Invalid token');
         }
+        console.log('Authenticated user:', user);
         req.user = user;
         req.tenantId = user.tenantId.toString();
         next();
@@ -28,7 +29,14 @@ const authenticate = async (req, res, next) => {
 exports.authenticate = authenticate;
 const authorize = (...roles) => {
     return (req, res, next) => {
-        if (!req.user || !roles.includes(req.user.role)) {
+        // Log the authorization attempt for debugging
+        if (req.user) {
+            console.log(`Authorizing user ${req.user.email}. Role: "${req.user.role}" (length: ${req.user.role.length}). Required roles: [${roles.join(', ')}]`);
+            const charCodes = req.user.role.split('').map(c => c.charCodeAt(0)).join(', ');
+            console.log(`Role char codes: [${charCodes}]`);
+        }
+        const userRole = req.user?.role?.trim(); // Trim potential whitespace
+        if (!req.user || !userRole || !roles.includes(userRole)) {
             const error = new errors_1.UnauthorizedError('Insufficient permissions');
             next(error);
         }

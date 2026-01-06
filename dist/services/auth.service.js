@@ -92,6 +92,25 @@ let AuthService = class AuthService {
         }
         return user;
     }
+    async getUsersByTenant(tenantId) {
+        return this.userRepository.find({ tenantId });
+    }
+    async createUser(data) {
+        const { email, password, tenantId } = data;
+        // Check if user with email already exists in the tenant
+        const existingUser = await this.userRepository.findOne({ email, tenantId });
+        if (existingUser) {
+            throw new errors_1.ConflictError('User with this email already exists in this farm');
+        }
+        // Hash password
+        const hashedPassword = await (0, password_util_1.hashPassword)(password);
+        // Create user
+        const newUser = await this.userRepository.create({
+            ...data,
+            password: hashedPassword,
+        });
+        return newUser;
+    }
     async updateUser(userId, data) {
         const user = await this.getUserById(userId);
         const updatedUser = await this.userRepository.updateById(userId, data);

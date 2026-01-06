@@ -26,6 +26,9 @@ let TenantService = class TenantService {
     async getTenantById(id) {
         return this.tenantRepository.findById(id);
     }
+    async updateTenant(id, data) {
+        return this.tenantRepository.updateById(id, data);
+    }
 };
 exports.TenantService = TenantService;
 exports.TenantService = TenantService = __decorate([

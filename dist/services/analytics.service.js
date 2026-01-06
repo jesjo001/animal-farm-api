@@ -70,11 +70,18 @@ let AnalyticsService = class AnalyticsService {
         startDate.setDate(startDate.getDate() - days);
         return this.productionService.getProductionChart(tenantId, startDate, endDate);
     }
-    async getFinancialTrends(tenantId, months = 12) {
-        const endDate = new Date();
-        const startDate = new Date();
-        startDate.setMonth(startDate.getMonth() - months);
+    async getFinancialTrends(tenantId, startDate, endDate) {
         return this.transactionService.getProfitLossReport(tenantId, startDate, endDate);
+    }
+    async getFinancialSummary(tenantId, startDate, endDate) {
+        const [summary, trends] = await Promise.all([
+            this.transactionService.getFinancialSummary(tenantId, startDate, endDate),
+            this.getFinancialTrends(tenantId, startDate, endDate)
+        ]);
+        return {
+            summary,
+            trends
+        };
     }
     async getEventTrends(tenantId, days = 30) {
         const endDate = new Date();
@@ -89,12 +96,13 @@ let AnalyticsService = class AnalyticsService {
             this.transactionService.getTransactions({ tenantId }, { page: 1, limit: 5 }),
             this.eventService.getEvents({ tenantId }, { page: 1, limit: 5 }),
         ]);
+        const mapId = (item) => ({ ...item.toObject(), id: item._id.toString() });
         return {
             kpis,
             recentActivity: {
-                production: recentProduction.data,
-                transactions: recentTransactions.data,
-                events: recentEvents.data,
+                production: recentProduction.data.map(mapId),
+                transactions: recentTransactions.data.map(mapId),
+                events: recentEvents.data.map(mapId),
             },
         };
     }

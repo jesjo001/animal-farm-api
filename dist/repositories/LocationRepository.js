@@ -16,6 +16,19 @@ const BaseRepository_1 = require("./BaseRepository");
 let LocationRepository = class LocationRepository extends BaseRepository_1.BaseRepository {
     constructor() {
         super(Location_model_1.Location);
+        console.log('LocationRepository initialized with model:', Location_model_1.Location.modelName);
+    }
+    async create(data) {
+        console.log('LocationRepository.create called with:', data);
+        try {
+            const result = await super.create(data);
+            console.log('LocationRepository.create result:', result);
+            return result;
+        }
+        catch (error) {
+            console.error('LocationRepository.create error:', error);
+            throw error;
+        }
     }
 };
 exports.LocationRepository = LocationRepository;

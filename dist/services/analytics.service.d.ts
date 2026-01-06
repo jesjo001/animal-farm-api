@@ -10,7 +10,8 @@ export declare class AnalyticsService {
     constructor(animalService: AnimalService, productionService: ProductionService, eventService: EventService, transactionService: TransactionService);
     getKPIs(tenantId: string): Promise<any>;
     getProductionTrends(tenantId: string, days?: number): Promise<any[]>;
-    getFinancialTrends(tenantId: string, months?: number): Promise<any[]>;
+    getFinancialTrends(tenantId: string, startDate: Date, endDate: Date): Promise<any[]>;
+    getFinancialSummary(tenantId: string, startDate: Date, endDate: Date): Promise<any>;
     getEventTrends(tenantId: string, days?: number): Promise<any>;
     getDashboardData(tenantId: string): Promise<any>;
     generateDailyAnalytics(): Promise<void>;

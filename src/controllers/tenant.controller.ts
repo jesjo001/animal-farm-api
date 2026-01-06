@@ -24,7 +24,7 @@ export const getTenant = async (req: Request, res: Response, next: NextFunction)
 
 export const getTenantProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tenant = await tenantService.getTenantById(req.user.tenantId);
+    const tenant = await tenantService.getTenantById(req.tenantId!);
     res.json({ success: true, data: tenant });
   } catch (error) {
     next(error);
@@ -33,7 +33,7 @@ export const getTenantProfile = async (req: Request, res: Response, next: NextFu
 
 export const updateTenantProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tenant = await tenantService.updateTenant(req.user.tenantId, req.body);
+    const tenant = await tenantService.updateTenant(req.tenantId!, req.body);
     res.json({ success: true, data: tenant });
   } catch (error) {
     next(error);

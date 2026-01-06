@@ -57,7 +57,7 @@ const userSchema = new mongoose_1.Schema({
     },
     role: {
         type: String,
-        enum: ['tenant_admin', 'manager', 'worker'],
+        enum: ['tenant_admin', 'manager', 'worker', 'viewer'],
         default: 'worker',
     },
     isActive: {

@@ -101,15 +101,7 @@ export const getMe = async (req: Request, res: Response, next: NextFunction) => 
 
     res.json({
       success: true,
-      data: {
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          tenantId: user.tenantId,
-        },
-      },
+      data: user,
     });
   } catch (error) {
     next(error);

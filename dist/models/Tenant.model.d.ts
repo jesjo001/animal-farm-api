@@ -6,6 +6,7 @@ export interface ITenant extends Document {
     email: string;
     phone?: string;
     address?: string;
+    currency: string;
     isActive: boolean;
     subscriptionPlan: 'free' | 'basic' | 'premium';
     createdAt: Date;

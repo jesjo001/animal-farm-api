@@ -47,7 +47,10 @@ export const getProductionChart = async (req: Request, res: Response, next: Next
 export const getRevenueChart = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const days = parseInt(req.query.days as string) || 30;
-    const chart = await analyticsService.getFinancialTrends(req.tenantId!, days);
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+    const chart = await analyticsService.getFinancialTrends(req.tenantId!, startDate, endDate);
 
     res.json({
       success: true,

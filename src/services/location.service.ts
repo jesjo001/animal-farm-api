@@ -1,6 +1,7 @@
 import { LocationRepository } from '../repositories/LocationRepository';
 import { container } from 'tsyringe';
 import { ILocation } from '../models/Location.model';
+import { Types } from 'mongoose';
 
 const locationRepository = container.resolve(LocationRepository);
 
@@ -11,7 +12,7 @@ export const createLocation = async (tenantId: string, locationData: Partial<ILo
     // Convert tenantId to ObjectId if needed
     const data = { 
       ...locationData, 
-      tenantId: tenantId // Mongoose should handle string to ObjectId conversion
+      tenantId: new Types.ObjectId(tenantId) // Convert string to ObjectId
     };
     
     console.log('Creating location with final data:', data);

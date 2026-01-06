@@ -27,7 +27,7 @@ let EventService = class EventService {
         const { page, limit } = options;
         const skip = (page - 1) * limit;
         const [events, total] = await Promise.all([
-            this.eventRepository.find(filters, { skip, limit, sort: { date: -1 } }),
+            this.eventRepository.find(filters, { skip, limit, sort: { date: -1 }, populate: 'animalId' }),
             this.eventRepository.count(filters),
         ]);
         return (0, pagination_util_1.createPaginatedResponse)(events, total, options);

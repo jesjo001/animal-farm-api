@@ -78,16 +78,21 @@ let TransactionService = class TransactionService {
         return this.transactionRepository.getTotalExpenses(tenantId, startDate, endDate);
     }
     async getFinancialSummary(tenantId, startDate, endDate) {
+        console.log('getFinancialSummary service called with:', { tenantId, startDate, endDate });
         const summary = await this.transactionRepository.getFinancialSummary(tenantId, startDate, endDate);
+        console.log('Raw summary from repository:', summary);
         const income = summary.find((s) => s._id === 'income') || { total: 0 };
         const expenses = summary.find((s) => s._id === 'expense') || { total: 0 };
+        console.log('Parsed income and expenses:', { income, expenses });
         const netProfit = income.total - expenses.total;
-        return {
+        const result = {
             totalIncome: income.total,
             totalExpenses: expenses.total,
             netProfit,
             profitMargin: income.total > 0 ? (netProfit / income.total * 100).toFixed(2) : 0,
         };
+        console.log('Final result:', result);
+        return result;
     }
     async getProfitLossReport(tenantId, startDate, endDate) {
         const transactions = await this.transactionRepository.findByDateRange(tenantId, startDate, endDate);

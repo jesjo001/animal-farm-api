@@ -60,6 +60,10 @@ const tenantSchema = new mongoose_1.Schema({
         type: String,
         trim: true,
     },
+    currency: {
+        type: String,
+        default: 'USD',
+    },
     isActive: {
         type: Boolean,
         default: true,

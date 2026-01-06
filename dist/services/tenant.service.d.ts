@@ -4,5 +4,6 @@ export declare class TenantService {
     constructor(tenantRepository: BaseRepository<any>);
     createTenant(data: any): Promise<any>;
     getTenantById(id: string): Promise<any>;
+    updateTenant(id: string, data: any): Promise<any>;
 }
 //# sourceMappingURL=tenant.service.d.ts.map

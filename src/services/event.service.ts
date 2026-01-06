@@ -20,7 +20,7 @@ export class EventService {
     const skip = (page - 1) * limit;
 
     const [events, total] = await Promise.all([
-      this.eventRepository.find(filters, { skip, limit, sort: { date: -1 } }),
+      this.eventRepository.find(filters, { skip, limit, sort: { date: -1 }, populate: 'animalId' }),
       this.eventRepository.count(filters),
     ]);
 

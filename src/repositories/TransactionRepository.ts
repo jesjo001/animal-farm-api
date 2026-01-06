@@ -60,10 +60,12 @@ export class TransactionRepository extends BaseRepository<ITransaction> {
   }
 
   async getFinancialSummary(tenantId: string, startDate: Date, endDate: Date): Promise<any> {
-    return this.model.aggregate([
+    console.log('getFinancialSummary repository called with:', { tenantId, startDate, endDate });
+    
+    const result = await this.model.aggregate([
       {
         $match: {
-          tenantId,
+          tenantId: tenantId,
           date: { $gte: startDate, $lte: endDate },
         },
       },
@@ -75,5 +77,8 @@ export class TransactionRepository extends BaseRepository<ITransaction> {
         },
       },
     ]);
+    
+    console.log('Aggregation result:', result);
+    return result;
   }
 }

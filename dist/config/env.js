@@ -30,6 +30,10 @@ const envSchema = zod_1.z.object({
     RATE_LIMIT_MAX_REQUESTS: zod_1.z.string().transform(Number).default('100'),
     LOG_LEVEL: zod_1.z.enum(['error', 'warn', 'info', 'debug']).default('info'),
     API_DOCS_ENABLED: zod_1.z.string().transform((val) => val === 'true').default('true'),
+    // Flutterwave configuration
+    FLUTTERWAVE_PUBLIC_KEY: zod_1.z.string(),
+    FLUTTERWAVE_SECRET_KEY: zod_1.z.string(),
+    FLUTTERWAVE_SECRET_HASH: zod_1.z.string().optional(),
 });
 const parsed = envSchema.safeParse(process.env);
 if (!parsed.success) {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFinancialSummary = void 0;
+exports.getComprehensiveAnalytics = exports.getFinancialSummary = void 0;
 const analytics_service_1 = require("../services/analytics.service");
 const tsyringe_1 = require("tsyringe");
 const analyticsService = tsyringe_1.container.resolve(analytics_service_1.AnalyticsService);
@@ -32,4 +32,31 @@ const getFinancialSummary = async (req, res, next) => {
     }
 };
 exports.getFinancialSummary = getFinancialSummary;
+const getComprehensiveAnalytics = async (req, res, next) => {
+    try {
+        const { period = '30days' } = req.query;
+        let days;
+        switch (period) {
+            case '7days':
+                days = 7;
+                break;
+            case '90days':
+                days = 90;
+                break;
+            case '1year':
+                days = 365;
+                break;
+            case '30days':
+            default:
+                days = 30;
+                break;
+        }
+        const analytics = await analyticsService.getComprehensiveAnalytics(req.tenantId, days);
+        res.json({ success: true, data: analytics });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+exports.getComprehensiveAnalytics = getComprehensiveAnalytics;
 //# sourceMappingURL=analytics.controller.js.map

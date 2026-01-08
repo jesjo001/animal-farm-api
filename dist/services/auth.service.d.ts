@@ -18,5 +18,6 @@ export declare class AuthService {
     createUser(data: any): Promise<any>;
     updateUser(userId: string, data: any): Promise<any>;
     changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void>;
+    refreshToken(token: string): Promise<string>;
 }
 //# sourceMappingURL=auth.service.d.ts.map

@@ -76,6 +76,33 @@ const transactionSchema = new mongoose_1.Schema({
         ref: 'User',
         required: true,
     },
+    // Payment gateway fields
+    paymentMethod: {
+        type: String,
+        enum: ['cash', 'bank_transfer', 'mobile_money', 'credit_card', 'check', 'flutterwave'],
+    },
+    paymentStatus: {
+        type: String,
+        enum: ['pending', 'completed', 'failed', 'cancelled'],
+        default: 'pending',
+    },
+    paymentReference: {
+        type: String,
+        trim: true,
+    },
+    paymentId: {
+        type: String,
+        trim: true,
+    },
+    customerEmail: {
+        type: String,
+        trim: true,
+        lowercase: true,
+    },
+    customerName: {
+        type: String,
+        trim: true,
+    },
 }, {
     timestamps: true,
 });

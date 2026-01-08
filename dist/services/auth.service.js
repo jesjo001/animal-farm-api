@@ -125,6 +125,24 @@ let AuthService = class AuthService {
         const hashedPassword = await (0, password_util_1.hashPassword)(newPassword);
         await this.userRepository.updateById(userId, { password: hashedPassword });
     }
+    async refreshToken(token) {
+        const decoded = (0, jwt_util_1.verifyRefreshJWT)(token);
+        if (!decoded.userId) {
+            throw new errors_1.UnauthorizedError('Invalid refresh token');
+        }
+        const user = await this.userRepository.findById(decoded.userId);
+        if (!user || !user.isActive) {
+            throw new errors_1.UnauthorizedError('User not found or inactive');
+        }
+        const payload = {
+            userId: user._id.toString(),
+            tenantId: user.tenantId.toString(),
+            role: user.role,
+            email: user.email,
+        };
+        const accessToken = (0, jwt_util_1.signJWT)(payload);
+        return accessToken;
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([

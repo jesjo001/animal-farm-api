@@ -11,6 +11,7 @@ import {
 } from '../controllers/animal.controller';
 import { authenticate, authorize } from '../middlewares/auth.middleware';
 import { tenantContext } from '../middlewares/tenantContext.middleware';
+import { checkPlanEnforcement } from '../middlewares/planEnforcement.middleware';
 
 const router = Router();
 
@@ -20,7 +21,7 @@ router.use(tenantContext);
 
 router.get('/', getAnimals);
 router.get('/stats', getAnimalStats);
-router.post('/', authorize('tenant_admin', 'manager'), createAnimal);
+router.post('/', authorize('tenant_admin', 'manager'), checkPlanEnforcement('animals'), createAnimal);
 router.get('/:id', getAnimal);
 router.put('/:id', authorize('tenant_admin', 'manager'), updateAnimal);
 router.delete('/:id', authorize('tenant_admin'), deleteAnimal);

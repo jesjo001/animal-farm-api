@@ -10,6 +10,12 @@ export interface ITransaction extends Document {
     description?: string;
     animalId?: mongoose.Types.ObjectId;
     recordedBy: mongoose.Types.ObjectId;
+    paymentMethod?: 'cash' | 'bank_transfer' | 'mobile_money' | 'credit_card' | 'check' | 'flutterwave';
+    paymentStatus?: 'pending' | 'completed' | 'failed' | 'cancelled';
+    paymentReference?: string;
+    paymentId?: string;
+    customerEmail?: string;
+    customerName?: string;
     createdAt: Date;
     updatedAt: Date;
 }

@@ -70,7 +70,7 @@ const tenantSchema = new mongoose_1.Schema({
     },
     subscriptionPlan: {
         type: String,
-        enum: ['free', 'basic', 'premium'],
+        enum: ['free', 'basic', 'pro', 'business'],
         default: 'free',
     },
 }, {

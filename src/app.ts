@@ -26,7 +26,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Compression
-app.use(compression());
+app.use(compression() as any);
 
 // Logging
 app.use((req, res, next) => {
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 // API documentation
 if (env.API_DOCS_ENABLED) {
   // Swagger setup would go here
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup({}));
+  app.use('/api-docs', swaggerUi.serve as any, swaggerUi.setup({}) as any);
 }
 
 // Routes

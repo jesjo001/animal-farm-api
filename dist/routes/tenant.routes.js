@@ -9,6 +9,7 @@ router.use(auth_middleware_1.authenticate);
 // Routes for tenant admins to manage their own profile
 router.get('/profile', (0, auth_middleware_1.authorize)('tenant_admin'), tenant_controller_1.getTenantProfile);
 router.put('/profile', (0, auth_middleware_1.authorize)('tenant_admin'), tenant_controller_1.updateTenantProfile);
+router.put('/plan', (0, auth_middleware_1.authorize)('tenant_admin'), tenant_controller_1.updateSubscriptionPlan);
 // Only super admin can create or get other tenants
 router.post('/', (0, auth_middleware_1.authorize)('super_admin'), tenant_controller_1.createTenant);
 router.get('/:id', (0, auth_middleware_1.authorize)('super_admin'), tenant_controller_1.getTenant);

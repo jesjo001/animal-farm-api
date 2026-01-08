@@ -54,6 +54,13 @@ export interface CreateTransactionDTO {
   productType?: string;
   description?: string;
   animalId?: string;
+  // Payment gateway fields
+  paymentMethod?: 'cash' | 'bank_transfer' | 'mobile_money' | 'credit_card' | 'check' | 'flutterwave';
+  paymentStatus?: 'pending' | 'completed' | 'failed' | 'cancelled';
+  paymentReference?: string;
+  paymentId?: string;
+  customerEmail?: string;
+  customerName?: string;
 }
 
 export interface LoginDTO {
@@ -68,6 +75,20 @@ export interface RegisterDTO {
   password: string;
   phone?: string;
   address?: string;
+}
+
+export interface PaymentData {
+  amount: number;
+  currency: string;
+  customerEmail: string;
+  customerName: string;
+  customerPhone?: string;
+  paymentDescription: string;
+  redirectUrl?: string;
+  tenantId: string;
+  userId: string;
+  transactionType?: 'income' | 'expense';
+  category?: string;
 }
 
 export interface ChangePasswordDTO {

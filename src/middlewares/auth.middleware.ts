@@ -32,21 +32,31 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
 export const authorize = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    // Log the authorization attempt for debugging
-    if (req.user) {
-      console.log(
-        `Authorizing user ${req.user.email}. Role: "${req.user.role}" (length: ${req.user.role.length}). Required roles: [${roles.join(', ')}]`
-      );
-      const charCodes = req.user.role.split('').map(c => c.charCodeAt(0)).join(', ');
-      console.log(`Role char codes: [${charCodes}]`);
+    if (!req.user) {
+        console.error('Authorization check failed: req.user is not defined.');
+        return next(new UnauthorizedError('Insufficient permissions: Not authenticated.'));
     }
 
-    const userRole = req.user?.role?.trim(); // Trim potential whitespace
+    const userRole = req.user.role?.trim();
+    console.log(`--- Authorization Check ---`);
+    console.log(`User: ${req.user.email}`);
+    console.log(`User Role (raw): "${req.user.role}" (type: ${typeof req.user.role})`);
+    console.log(`User Role (trimmed): "${userRole}" (type: ${typeof userRole})`);
+    console.log(`Required Roles: [${roles.join(', ')}] (type: ${typeof roles})`);
 
-    if (!req.user || !userRole || !roles.includes(userRole)) {
+    if (!userRole) {
+        console.error('Authorization check failed: userRole is undefined or empty after trim.');
+        return next(new UnauthorizedError('Insufficient permissions: Invalid user role.'));
+    }
+    
+    const isIncluded = roles.includes(userRole);
+    console.log(`Check: roles.includes(userRole) => ${isIncluded}`);
+
+    if (!isIncluded) {
       const error = new UnauthorizedError('Insufficient permissions');
       next(error);
     } else {
+      console.log(`Authorization successful.`);
       next();
     }
   };

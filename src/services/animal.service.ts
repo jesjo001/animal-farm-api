@@ -28,6 +28,10 @@ export class AnimalService {
     return createPaginatedResponse(animals, total, options);
   }
 
+  async count(filters: any): Promise<number> {
+    return this.animalRepository.count(filters);
+  }
+
   async getAnimalById(id: string, tenantId: string): Promise<any> {
     const animal = await this.animalRepository.findOne({ _id: id, tenantId, isActive: true });
     if (!animal) {

@@ -20,5 +20,9 @@ export class TenantService {
     return this.tenantRepository.updateById(id, data);
   }
 
+  async updateSubscriptionPlan(id: string, plan: string) {
+    return this.tenantRepository.updateById(id, { subscriptionPlan: plan });
+  }
+
   // Add other tenant-related methods
 }

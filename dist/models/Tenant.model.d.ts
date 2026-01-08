@@ -8,7 +8,7 @@ export interface ITenant extends Document {
     address?: string;
     currency: string;
     isActive: boolean;
-    subscriptionPlan: 'free' | 'basic' | 'premium';
+    subscriptionPlan: 'free' | 'basic' | 'pro' | 'business';
     createdAt: Date;
     updatedAt: Date;
 }

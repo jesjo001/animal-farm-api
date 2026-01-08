@@ -11,6 +11,13 @@ export interface ITransaction extends Document {
   description?: string;
   animalId?: mongoose.Types.ObjectId; // For animal-specific transactions
   recordedBy: mongoose.Types.ObjectId;
+  // Payment gateway fields
+  paymentMethod?: 'cash' | 'bank_transfer' | 'mobile_money' | 'credit_card' | 'check' | 'flutterwave';
+  paymentStatus?: 'pending' | 'completed' | 'failed' | 'cancelled';
+  paymentReference?: string; // Flutterwave transaction reference
+  paymentId?: string; // Flutterwave payment ID
+  customerEmail?: string;
+  customerName?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -56,6 +63,33 @@ const transactionSchema = new Schema<ITransaction>({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
+  },
+  // Payment gateway fields
+  paymentMethod: {
+    type: String,
+    enum: ['cash', 'bank_transfer', 'mobile_money', 'credit_card', 'check', 'flutterwave'],
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'completed', 'failed', 'cancelled'],
+    default: 'pending',
+  },
+  paymentReference: {
+    type: String,
+    trim: true,
+  },
+  paymentId: {
+    type: String,
+    trim: true,
+  },
+  customerEmail: {
+    type: String,
+    trim: true,
+    lowercase: true,
+  },
+  customerName: {
+    type: String,
+    trim: true,
   },
 }, {
   timestamps: true,

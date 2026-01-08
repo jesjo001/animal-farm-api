@@ -4,6 +4,7 @@ exports.changePassword = exports.getMe = exports.resetPassword = exports.forgotP
 const auth_service_1 = require("../services/auth.service");
 const tsyringe_1 = require("tsyringe");
 const validators_1 = require("../utils/validators");
+const errors_1 = require("../utils/errors");
 function getAuthService() {
     return tsyringe_1.container.resolve(auth_service_1.AuthService);
 }
@@ -60,11 +61,16 @@ const logout = async (req, res, next) => {
 exports.logout = logout;
 const refreshToken = async (req, res, next) => {
     try {
-        // Implement refresh token logic
-        // This would require storing refresh tokens and validating them
+        const { refreshToken } = req.body;
+        if (!refreshToken) {
+            throw new errors_1.UnauthorizedError('Refresh token is required');
+        }
+        const accessToken = await getAuthService().refreshToken(refreshToken);
         res.json({
             success: true,
-            message: 'Token refresh not implemented yet',
+            data: {
+                accessToken,
+            },
         });
     }
     catch (error) {

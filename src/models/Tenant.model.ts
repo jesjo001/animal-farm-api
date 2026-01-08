@@ -9,7 +9,7 @@ export interface ITenant extends Document {
   address?: string;
   currency: string;
   isActive: boolean;
-  subscriptionPlan: 'free' | 'basic' | 'premium';
+  subscriptionPlan: 'free' | 'basic' | 'pro' | 'business';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -50,7 +50,7 @@ const tenantSchema = new Schema<ITenant>({
   },
   subscriptionPlan: {
     type: String,
-    enum: ['free', 'basic', 'premium'],
+    enum: ['free', 'basic', 'pro', 'business'],
     default: 'free',
   },
 }, {

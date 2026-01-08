@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import Tenant from '../models/Tenant.model';
 import User from '../models/User.model';
 import { BaseRepository } from '../repositories/BaseRepository';
-import { signJWT, signRefreshJWT } from '../utils/jwt.util';
+import { signJWT, signRefreshJWT, verifyRefreshJWT } from '../utils/jwt.util';
 import { hashPassword, comparePassword } from '../utils/password.util';
 import { RegisterDTO, LoginDTO, JWTPayload } from '../types';
 import { ConflictError, UnauthorizedError, NotFoundError } from '../utils/errors';
@@ -138,5 +138,29 @@ export class AuthService {
 
     const hashedPassword = await hashPassword(newPassword);
     await this.userRepository.updateById(userId, { password: hashedPassword });
+  }
+
+  async refreshToken(token: string): Promise<string> {
+    const decoded = verifyRefreshJWT(token);
+    
+    if (!decoded.userId) {
+      throw new UnauthorizedError('Invalid refresh token');
+    }
+
+    const user = await this.userRepository.findById(decoded.userId);
+
+    if (!user || !user.isActive) {
+      throw new UnauthorizedError('User not found or inactive');
+    }
+
+    const payload: JWTPayload = {
+      userId: user._id.toString(),
+      tenantId: user.tenantId.toString(),
+      role: user.role,
+      email: user.email,
+    };
+
+    const accessToken = signJWT(payload);
+    return accessToken;
   }
 }

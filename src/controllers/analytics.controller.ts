@@ -32,3 +32,32 @@ export const getFinancialSummary = async (req: Request, res: Response, next: Nex
         next(error);
     }
 };
+
+export const getComprehensiveAnalytics = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { period = '30days' } = req.query;
+        let days: number;
+
+        switch (period) {
+            case '7days':
+                days = 7;
+                break;
+            case '90days':
+                days = 90;
+                break;
+            case '1year':
+                days = 365;
+                break;
+            case '30days':
+            default:
+                days = 30;
+                break;
+        }
+
+        const analytics = await analyticsService.getComprehensiveAnalytics(req.tenantId!, days);
+        res.json({ success: true, data: analytics });
+    } catch (error) {
+        next(error);
+    }
+};
+

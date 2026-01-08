@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTenantProfile = exports.getTenantProfile = exports.getTenant = exports.createTenant = void 0;
+exports.updateSubscriptionPlan = exports.updateTenantProfile = exports.getTenantProfile = exports.getTenant = exports.createTenant = void 0;
 const tenant_service_1 = require("../services/tenant.service");
 const tsyringe_1 = require("tsyringe");
 const tenantService = tsyringe_1.container.resolve(tenant_service_1.TenantService);
@@ -44,4 +44,18 @@ const updateTenantProfile = async (req, res, next) => {
     }
 };
 exports.updateTenantProfile = updateTenantProfile;
+const updateSubscriptionPlan = async (req, res, next) => {
+    try {
+        const { plan } = req.body;
+        if (!req.user) {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+        const tenant = await tenantService.updateSubscriptionPlan(req.user.tenantId.toString(), plan);
+        res.json({ success: true, data: tenant });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+exports.updateSubscriptionPlan = updateSubscriptionPlan;
 //# sourceMappingURL=tenant.controller.js.map

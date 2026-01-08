@@ -83,6 +83,65 @@ let AnalyticsService = class AnalyticsService {
             trends
         };
     }
+    async getComprehensiveAnalytics(tenantId, days) {
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(endDate.getDate() - days);
+        const prevEndDate = new Date(startDate);
+        prevEndDate.setDate(prevEndDate.getDate() - 1);
+        const prevStartDate = new Date(prevEndDate);
+        prevStartDate.setDate(prevStartDate.getDate() - days);
+        const [
+        // Current period data
+        revenue, expenses, eggCount, newAnimals, animalStats, mortalityRate, 
+        // Previous period data
+        prevRevenue, prevExpenses, prevEggCount, prevNewAnimals, 
+        // Chart data
+        productionTrends, financialTrends, revenueDistribution,] = await Promise.all([
+            this.transactionService.getTotalIncome(tenantId, startDate, endDate),
+            this.transactionService.getTotalExpenses(tenantId, startDate, endDate),
+            this.productionService.getTotalEggs(tenantId, startDate, endDate),
+            this.animalService.count({ tenantId, createdAt: { $gte: startDate, $lte: endDate } }),
+            this.animalService.getAnimalStats(tenantId),
+            this.eventService.getMortalityRate(tenantId, 'monthly'), // Assuming monthly is ok for this KPI
+            this.transactionService.getTotalIncome(tenantId, prevStartDate, prevEndDate),
+            this.transactionService.getTotalExpenses(tenantId, prevStartDate, prevEndDate),
+            this.productionService.getTotalEggs(tenantId, prevStartDate, prevEndDate),
+            this.animalService.count({ tenantId, createdAt: { $gte: prevStartDate, $lte: prevEndDate } }),
+            this.getProductionTrends(tenantId, days),
+            this.getFinancialTrends(tenantId, startDate, endDate),
+            this.transactionService.getFinancialSummary(tenantId, startDate, endDate),
+        ]);
+        // Calculate KPIs
+        const productionEfficiency = (animalStats.total > 0 && days > 0) ? (eggCount / (animalStats.total * days)) * 100 : 0;
+        const revenuePerAnimal = animalStats.total > 0 ? revenue / animalStats.total : 0;
+        // Assemble response
+        return {
+            kpis: {
+                productionEfficiency,
+                revenuePerAnimal,
+                mortalityRate: mortalityRate.mortalityRate,
+                feedConversion: 1.85, // Placeholder
+            },
+            productionTrends,
+            financialTrends,
+            revenueDistribution: revenueDistribution.summary,
+            comparison: {
+                thisMonth: {
+                    revenue,
+                    expenses,
+                    newAnimals,
+                    eggsCollected: eggCount
+                },
+                lastMonth: {
+                    revenue: prevRevenue,
+                    expenses: prevExpenses,
+                    newAnimals: prevNewAnimals,
+                    eggsCollected: prevEggCount
+                }
+            }
+        };
+    }
     async getEventTrends(tenantId, days = 30) {
         const endDate = new Date();
         const startDate = new Date();

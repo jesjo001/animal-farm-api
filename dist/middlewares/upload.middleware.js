@@ -58,7 +58,7 @@ exports.upload = (0, multer_1.default)({
     limits: {
         fileSize: env_1.env.MAX_FILE_SIZE || 5242880, // 5MB default
     },
-    fileFilter,
+    fileFilter: fileFilter,
 });
 const uploadSingle = (fieldName) => exports.upload.single(fieldName);
 exports.uploadSingle = uploadSingle;

@@ -13,6 +13,8 @@ export declare const env: {
     RATE_LIMIT_MAX_REQUESTS: number;
     LOG_LEVEL: "error" | "warn" | "info" | "debug";
     API_DOCS_ENABLED: boolean;
+    FLUTTERWAVE_PUBLIC_KEY: string;
+    FLUTTERWAVE_SECRET_KEY: string;
     MONGODB_TEST_URI?: string | undefined;
     CLOUDINARY_CLOUD_NAME?: string | undefined;
     CLOUDINARY_API_KEY?: string | undefined;
@@ -21,5 +23,6 @@ export declare const env: {
     SMTP_PORT?: number | undefined;
     SMTP_USER?: string | undefined;
     SMTP_PASSWORD?: string | undefined;
+    FLUTTERWAVE_SECRET_HASH?: string | undefined;
 };
 //# sourceMappingURL=env.d.ts.map

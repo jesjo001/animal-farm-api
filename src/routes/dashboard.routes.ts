@@ -7,6 +7,7 @@ import {
 } from '../controllers/dashboard.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 import { tenantContext } from '../middlewares/tenantContext.middleware';
+import { checkPlanEnforcement } from '../middlewares/planEnforcement.middleware';
 
 const router = Router();
 

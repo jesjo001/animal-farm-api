@@ -36,6 +36,9 @@ let AnimalService = class AnimalService {
         ]);
         return (0, pagination_util_1.createPaginatedResponse)(animals, total, options);
     }
+    async count(filters) {
+        return this.animalRepository.count(filters);
+    }
     async getAnimalById(id, tenantId) {
         const animal = await this.animalRepository.findOne({ _id: id, tenantId, isActive: true });
         if (!animal) {

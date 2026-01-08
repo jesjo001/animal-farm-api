@@ -6,6 +6,7 @@ export declare class AnimalService {
     private auditService;
     constructor(animalRepository: AnimalRepository, auditService: AuditService);
     getAnimals(filters: any, options: PaginationOptions): Promise<PaginatedResponse<any>>;
+    count(filters: any): Promise<number>;
     getAnimalById(id: string, tenantId: string): Promise<any>;
     createAnimal(data: CreateAnimalDTO, tenantId: string, userId: string): Promise<any>;
     updateAnimal(id: string, data: Partial<CreateAnimalDTO>, tenantId: string, userId: string): Promise<any>;

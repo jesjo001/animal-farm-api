@@ -12,6 +12,7 @@ export declare class AnalyticsService {
     getProductionTrends(tenantId: string, days?: number): Promise<any[]>;
     getFinancialTrends(tenantId: string, startDate: Date, endDate: Date): Promise<any[]>;
     getFinancialSummary(tenantId: string, startDate: Date, endDate: Date): Promise<any>;
+    getComprehensiveAnalytics(tenantId: string, days: number): Promise<any>;
     getEventTrends(tenantId: string, days?: number): Promise<any>;
     getDashboardData(tenantId: string): Promise<any>;
     generateDailyAnalytics(): Promise<void>;

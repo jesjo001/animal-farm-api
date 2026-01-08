@@ -25,7 +25,7 @@ if (env.CLOUDINARY_CLOUD_NAME) {
       allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'pdf', 'doc', 'docx', 'xls', 'xlsx'],
       transformation: [{ width: 1000, height: 1000, crop: 'limit' }],
     } as any,
-  });
+  }) as any;
 } else {
   // Use local disk storage
   storage = multer.diskStorage({
@@ -57,9 +57,9 @@ export const upload = multer({
   limits: {
     fileSize: env.MAX_FILE_SIZE || 5242880, // 5MB default
   },
-  fileFilter,
+  fileFilter: fileFilter as any,
 });
 
-export const uploadSingle = (fieldName: string): RequestHandler => upload.single(fieldName);
+export const uploadSingle = (fieldName: string): RequestHandler => upload.single(fieldName) as any;
 export const uploadMultiple = (fieldName: string, maxCount: number = 5): RequestHandler =>
-  upload.array(fieldName, maxCount);
+  upload.array(fieldName, maxCount) as any;

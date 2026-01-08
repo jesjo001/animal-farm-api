@@ -14,6 +14,8 @@ const event_routes_1 = __importDefault(require("./event.routes"));
 const transaction_routes_1 = __importDefault(require("./transaction.routes"));
 const user_routes_1 = __importDefault(require("./user.routes"));
 const location_routes_1 = __importDefault(require("./location.routes"));
+const payment_routes_1 = __importDefault(require("./payment.routes"));
+const subscription_routes_1 = __importDefault(require("./subscription.routes"));
 const router = (0, express_1.Router)();
 // API routes
 router.use('/auth', auth_routes_1.default);
@@ -26,6 +28,8 @@ router.use('/events', event_routes_1.default);
 router.use('/transactions', transaction_routes_1.default);
 router.use('/users', user_routes_1.default);
 router.use('/locations', location_routes_1.default);
+router.use('/payments', payment_routes_1.default);
+router.use('/subscriptions', subscription_routes_1.default);
 // Health check
 router.get('/health', (req, res) => {
     res.json({

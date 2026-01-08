@@ -39,3 +39,17 @@ export const updateTenantProfile = async (req: Request, res: Response, next: Nex
     next(error);
   }
 };
+
+export const updateSubscriptionPlan = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { plan } = req.body;
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+    const tenant = await tenantService.updateSubscriptionPlan(req.user.tenantId.toString(), plan);
+    res.json({ success: true, data: tenant });
+  } catch (error) {
+    next(error);
+  }
+};
+

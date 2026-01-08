@@ -26,6 +26,10 @@ const envSchema = z.object({
   RATE_LIMIT_MAX_REQUESTS: z.string().transform(Number).default('100'),
   LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
   API_DOCS_ENABLED: z.string().transform((val) => val === 'true').default('true'),
+  // Flutterwave configuration
+  FLUTTERWAVE_PUBLIC_KEY: z.string(),
+  FLUTTERWAVE_SECRET_KEY: z.string(),
+  FLUTTERWAVE_SECRET_HASH: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

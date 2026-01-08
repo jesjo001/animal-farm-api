@@ -18,12 +18,7 @@ export interface PaymentResponse {
     message?: string;
     paymentLink?: string;
 }
-export declare class PaymentService {
-    private transactionService;
-    private flutterwave;
-    constructor(transactionService: TransactionService);
-    initiatePayment(paymentData: PaymentData): Promise<PaymentResponse>;
-    verifyPayment(transactionId: string): Promise<PaymentResponse>;
-    handleWebhook(payload: any): Promise<void>;
-}
+export declare function initiatePayment(paymentData: PaymentData, transactionService: TransactionService): Promise<PaymentResponse>;
+export declare function verifyPayment(transactionId: string, transactionService: TransactionService): Promise<PaymentResponse>;
+export declare function handleWebhook(payload: any, transactionService: TransactionService): Promise<void>;
 //# sourceMappingURL=payment.service.d.ts.map

@@ -58,7 +58,7 @@ const checkPlanEnforcement = (feature) => {
                     const users = await authService.getUsersByTenant(tenantId);
                     currentCount = users.length;
                 }
-                if (currentCount >= limit) {
+                if (typeof limit === 'number' && currentCount >= limit) {
                     return next(new errors_1.ForbiddenError(`You have reached the limit of ${limit} ${feature} for your plan.`));
                 }
             }

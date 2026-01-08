@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
-import { PaymentService } from '../services/payment.service';
+import { initiatePayment as initiatePaymentFunction, verifyPayment as verifyPaymentFunction, handleWebhook as handleWebhookFunction } from '../services/payment.service';
+import { TransactionService } from '../services/transaction.service';
 import { PaymentData } from '../types';
 
-const paymentService = container.resolve(PaymentService);
+const transactionService = container.resolve(TransactionService);
 
 export const initiatePayment = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -13,7 +14,7 @@ export const initiatePayment = async (req: Request, res: Response, next: NextFun
       userId: req.user!.id,
     };
 
-    const result = await paymentService.initiatePayment(paymentData);
+    const result = await initiatePaymentFunction(paymentData, transactionService);
 
     if (result.success) {
       res.status(200).json(result);
@@ -28,7 +29,7 @@ export const initiatePayment = async (req: Request, res: Response, next: NextFun
 export const verifyPayment = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { transactionId } = req.params;
-    const result = await paymentService.verifyPayment(transactionId);
+    const result = await verifyPaymentFunction(transactionId, transactionService);
 
     if (result.success) {
       res.status(200).json(result);
@@ -42,7 +43,7 @@ export const verifyPayment = async (req: Request, res: Response, next: NextFunct
 
 export const handleWebhook = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await paymentService.handleWebhook(req.body);
+    await handleWebhookFunction(req.body, transactionService);
     res.status(200).json({ success: true, message: 'Webhook processed successfully' });
   } catch (error) {
     next(error);

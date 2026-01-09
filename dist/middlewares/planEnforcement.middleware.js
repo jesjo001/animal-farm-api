@@ -8,17 +8,17 @@ const animal_service_1 = require("../services/animal.service");
 const auth_service_1 = require("../services/auth.service");
 const PLAN_LIMITS = {
     free: {
-        animals: 10,
+        animals: 100,
         users: 1,
         analytics: false,
     },
     basic: {
-        animals: 100,
+        animals: 1000,
         users: 5,
         analytics: false,
     },
     pro: {
-        animals: 500,
+        animals: 5000,
         users: 10,
         analytics: true,
     },

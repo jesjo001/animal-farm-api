@@ -49,6 +49,7 @@ export const authorize = (...roles: string[]) => {
         return next(new UnauthorizedError('Insufficient permissions: Invalid user role.'));
     }
     
+    console.log(`Checking if user role "${userRole}" is in required roles...`); 
     const isIncluded = roles.includes(userRole);
     console.log(`Check: roles.includes(userRole) => ${isIncluded}`);
 

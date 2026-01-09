@@ -11,9 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const tsyringe_1 = require("tsyringe");
+const Referral_model_1 = __importDefault(require("../models/Referral.model"));
 const BaseRepository_1 = require("../repositories/BaseRepository");
 const jwt_util_1 = require("../utils/jwt.util");
 const password_util_1 = require("../utils/password.util");
@@ -29,6 +33,12 @@ let AuthService = class AuthService {
         if (existingTenant) {
             throw new errors_1.ConflictError('Farm with this email already exists');
         }
+        // Handle referral
+        let referrer;
+        if (data.referralCode) {
+            referrer = await this.userRepository.findOne({ referralCode: data.referralCode });
+            // We don't block registration if the referral code is invalid.
+        }
         // Create tenant
         const tenant = await this.tenantRepository.create({
             name: data.farmName,
@@ -39,13 +49,24 @@ let AuthService = class AuthService {
         });
         // Create admin user for the tenant
         const hashedPassword = await (0, password_util_1.hashPassword)(data.password);
-        const user = await this.userRepository.create({
+        const userObject = {
             tenantId: tenant._id,
             name: data.ownerName,
             email: data.email,
             password: hashedPassword,
             role: 'tenant_admin',
-        });
+        };
+        if (referrer) {
+            userObject.referredBy = data.referralCode;
+            userObject.referrer = referrer._id;
+        }
+        const user = await this.userRepository.create(userObject);
+        if (referrer) {
+            await Referral_model_1.default.create({
+                referrer: referrer._id,
+                referred: user._id,
+            });
+        }
         // Generate tokens
         const payload = {
             userId: user._id.toString(),

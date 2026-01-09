@@ -11,6 +11,7 @@ import userRoutes from './user.routes';
 import locationRoutes from './location.routes';
 import paymentRoutes from './payment.routes';
 import subscriptionRoutes from './subscription.routes';
+import referralRoutes from './referral.routes';
 
 const router = Router();
 
@@ -27,6 +28,7 @@ router.use('/users', userRoutes);
 router.use('/locations', locationRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/subscriptions', subscriptionRoutes);
+router.use('/referrals', referralRoutes);
 
 // Health check
 router.get('/health', (req, res) => {

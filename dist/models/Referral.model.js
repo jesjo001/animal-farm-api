@@ -34,59 +34,28 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const userSchema = new mongoose_1.Schema({
-    tenantId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Tenant',
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        lowercase: true,
-        trim: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    role: {
-        type: String,
-        enum: ['tenant_admin', 'manager', 'worker', 'viewer'],
-        default: 'worker',
-    },
-    isActive: {
-        type: Boolean,
-        default: true,
-    },
-    lastLogin: {
-        type: Date,
-    },
-    referralCode: {
-        type: String,
-        unique: true,
-        sparse: true,
-        trim: true,
-    },
-    referredBy: {
-        type: String,
-        trim: true,
-    },
+const referralSchema = new mongoose_1.Schema({
     referrer: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
+    },
+    referred: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+        unique: true,
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'registered', 'subscribed'],
+        default: 'registered',
     },
 }, {
     timestamps: true,
 });
-// Compound index for tenant-scoped uniqueness
-userSchema.index({ tenantId: 1, email: 1 }, { unique: true });
-userSchema.index({ tenantId: 1, isActive: 1 });
-const User = mongoose_1.default.model('User', userSchema);
-exports.default = User;
-//# sourceMappingURL=User.model.js.map
+referralSchema.index({ referrer: 1 });
+referralSchema.index({ referred: 1 });
+const Referral = mongoose_1.default.model('Referral', referralSchema);
+exports.default = Referral;
+//# sourceMappingURL=Referral.model.js.map

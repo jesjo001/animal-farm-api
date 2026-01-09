@@ -2,6 +2,9 @@ import Flutterwave from 'flutterwave-node-v3';
 import axios from 'axios';
 import { TransactionService } from './transaction.service';
 import { env } from '../config/env';
+import User from '../models/User.model';
+import Commission from '../models/Commission.model';
+import Transaction from '../models/Transaction.model';
 
 export interface PaymentData {
   amount: number;
@@ -119,16 +122,40 @@ export async function verifyPayment(
     const response = await flutterwave.Transaction.verify({ id: transactionId });
 
     if (response.status === 'success' && response.data.status === 'successful') {
+      const tx_ref = response.data.tx_ref;
+      const transaction = await Transaction.findOne({ paymentReference: tx_ref });
+
+      if (!transaction) {
+        // This should not happen in a normal flow
+        throw new Error('Transaction not found for payment verification');
+      }
+
       // Update transaction status
       await transactionService.updateTransaction(
-        response.data.tx_ref.split('_')[2], // Extract transaction ID from tx_ref
+        transaction._id.toString(),
         {
           paymentStatus: 'completed',
           paymentId: transactionId,
         },
-        '', // tenantId will be handled in controller
-        '' // userId will be handled in controller
+        transaction.tenantId.toString(),
+        transaction.recordedBy.toString()
       );
+
+      // Handle referral commission
+      const user = await User.findById(transaction.recordedBy);
+      if (user && user.referrer && response.data) {
+        const responseData: any = response.data; // Explicitly cast to any
+        const commissionRate = 0.20; // 20%
+        const commissionAmount = (responseData.amount || 0) * commissionRate;
+
+        await Commission.create({
+          referrer: user.referrer,
+          referred: user._id,
+          transaction: transaction._id,
+          amount: commissionAmount,
+          commissionRate: commissionRate,
+        });
+      }
 
       return {
         success: true,
@@ -136,13 +163,18 @@ export async function verifyPayment(
         message: 'Payment verified successfully',
       };
     } else {
-      // Update transaction status to failed
-      await transactionService.updateTransaction(
-        response.data.tx_ref.split('_')[2],
-        { paymentStatus: 'failed' },
-        '',
-        ''
-      );
+      const tx_ref = response.data.tx_ref;
+      const transaction = await Transaction.findOne({ paymentReference: tx_ref });
+      
+      if (transaction) {
+        // Update transaction status to failed
+        await transactionService.updateTransaction(
+          transaction._id.toString(),
+          { paymentStatus: 'failed' },
+          transaction.tenantId.toString(),
+          transaction.recordedBy.toString()
+        );
+      }
 
       return {
         success: false,
@@ -159,29 +191,123 @@ export async function verifyPayment(
 }
 
 export async function handleWebhook(
+
   payload: any,
+
   transactionService: TransactionService
+
 ): Promise<void> {
+
   try {
-    // Verify webhook signature (implement based on Flutterwave docs)
+
+    // TODO: Verify webhook signature (implement based on Flutterwave docs)
+
     const secretHash = env.FLUTTERWAVE_SECRET_HASH;
+
     // Add signature verification logic here
+
+
 
     const { event, data } = payload;
 
+
+
     if (event === 'charge.completed' && data.status === 'successful') {
+
+      const tx_ref = data.tx_ref;
+
+      const transaction = await Transaction.findOne({ paymentReference: tx_ref });
+
+
+
+      if (!transaction) {
+
+        // This should not happen in a normal flow
+
+        console.error('Transaction not found for webhook processing');
+
+        return;
+
+      }
+
+
+
       // Update transaction status
+
       await transactionService.updateTransaction(
-        data.tx_ref.split('_')[2],
+
+        transaction._id.toString(),
+
         {
+
           paymentStatus: 'completed',
+
           paymentId: data.id.toString(),
+
         },
-        '', // tenantId
-        '' // userId
+
+        transaction.tenantId.toString(),
+
+        transaction.recordedBy.toString()
+
       );
+
+
+
+            // Handle referral commission
+
+
+
+            const user = await User.findById(transaction.recordedBy);
+
+
+
+            if (user && user.referrer && data) {
+
+
+
+              const webhookData: any = data; // Explicitly cast to any
+
+
+
+              const commissionRate = 0.20; // 20%
+
+
+
+              const commissionAmount = (webhookData.amount || 0) * commissionRate;
+
+
+
+      
+
+
+
+              await Commission.create({
+
+
+
+                referrer: user.referrer,
+
+          referred: user._id,
+
+          transaction: transaction._id,
+
+          amount: commissionAmount,
+
+          commissionRate: commissionRate,
+
+        });
+
+      }
+
     }
+
   } catch (error) {
+
     console.error('Webhook handling error:', error);
+
   }
+
 }
+
+

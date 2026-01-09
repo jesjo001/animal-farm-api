@@ -2,6 +2,7 @@ import { singleton, inject } from 'tsyringe';
 import bcrypt from 'bcryptjs';
 import Tenant from '../models/Tenant.model';
 import User from '../models/User.model';
+import Referral from '../models/Referral.model';
 import { BaseRepository } from '../repositories/BaseRepository';
 import { signJWT, signRefreshJWT, verifyRefreshJWT } from '../utils/jwt.util';
 import { hashPassword, comparePassword } from '../utils/password.util';
@@ -22,6 +23,13 @@ export class AuthService {
       throw new ConflictError('Farm with this email already exists');
     }
 
+    // Handle referral
+    let referrer;
+    if (data.referralCode) {
+      referrer = await this.userRepository.findOne({ referralCode: data.referralCode });
+      // We don't block registration if the referral code is invalid.
+    }
+
     // Create tenant
     const tenant = await this.tenantRepository.create({
       name: data.farmName,
@@ -33,13 +41,28 @@ export class AuthService {
 
     // Create admin user for the tenant
     const hashedPassword = await hashPassword(data.password);
-    const user = await this.userRepository.create({
+    const userObject: any = {
       tenantId: tenant._id,
       name: data.ownerName,
       email: data.email,
       password: hashedPassword,
       role: 'tenant_admin',
-    });
+    };
+
+    if (referrer) {
+      userObject.referredBy = data.referralCode;
+      userObject.referrer = referrer._id;
+    }
+
+    const user = await this.userRepository.create(userObject);
+
+    if (referrer) {
+      await Referral.create({
+        referrer: referrer._id,
+        referred: user._id,
+      });
+    }
+
 
     // Generate tokens
     const payload: JWTPayload = {

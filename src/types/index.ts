@@ -75,6 +75,7 @@ export interface RegisterDTO {
   password: string;
   phone?: string;
   address?: string;
+  referralCode?: string;
 }
 
 export interface PaymentData {
@@ -104,6 +105,6 @@ export interface ResetPasswordDTO {
 export interface JWTPayload {
   userId: string;
   tenantId: string;
-  role: string;
-  email: string;
-}
+      role: string;
+      email: string;
+    }  

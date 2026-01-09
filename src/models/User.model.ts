@@ -11,6 +11,9 @@ export interface IUser extends Document {
   lastLogin?: Date;
   createdAt: Date;
   updatedAt: Date;
+  referralCode?: string;
+  referredBy?: string;
+  referrer?: mongoose.Types.ObjectId;
 }
 
 const userSchema = new Schema<IUser>({
@@ -45,6 +48,20 @@ const userSchema = new Schema<IUser>({
   },
   lastLogin: {
     type: Date,
+  },
+  referralCode: {
+    type: String,
+    unique: true,
+    sparse: true,
+    trim: true,
+  },
+  referredBy: {
+    type: String,
+    trim: true,
+  },
+  referrer: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
 }, {
   timestamps: true,

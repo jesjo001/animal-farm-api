@@ -67,6 +67,7 @@ export interface RegisterDTO {
     password: string;
     phone?: string;
     address?: string;
+    referralCode?: string;
 }
 export interface PaymentData {
     amount: number;

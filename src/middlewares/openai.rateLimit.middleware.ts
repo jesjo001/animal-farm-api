@@ -2,7 +2,7 @@
 
 import rateLimit from 'express-rate-limit';
 import { Request, Response, NextFunction } from 'express';
-import { logger } from '../config/logger';
+import logger from '../config/logger';
 
 /**
  * Rate limiter for OpenAI-powered endpoints

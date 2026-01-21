@@ -2,15 +2,14 @@
 
 import { OpenAIService } from './openai.service';
 import { TokenService } from './token.service';
-import { BadRequestError } from '../utils/errors';
+import BadRequestError from '../utils/errors';
 import { ChickSexingBatchModel } from '../models/ChickSexingBatch.model';
 import { ChickSexingResultModel } from '../models/ChickSexingResult.model';
 import { logger } from '../config/logger';
 
 // DTO definition
 export interface CreateBatchDTO {
-    // Define properties for CreateBatchDTO as needed
-    name: string;
+    name?: string;
 }
 
 
@@ -160,8 +159,8 @@ export class ChickSexingService {
       // Finalize batch
       await this.finalizeBatch(batchId);
       
-    } catch (error: any) {
-      logger.error(`Batch processing failed for ${batchId}:`, error);
+    } catch (error: unknown) {
+      logger.error(`Batch processing failed for ${batchId}:`, (error as Error).message);
       await this.handleBatchError(batchId, error);
     }
   }

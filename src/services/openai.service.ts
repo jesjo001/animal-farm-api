@@ -3,7 +3,7 @@
 import OpenAI from 'openai';
 import fs from 'fs';
 import path from 'path';
-import { logger } from '../config/logger';
+import logger from '../config/logger';
 import { TrainingSampleModel } from '../models/TrainingSample.model';
 
 const openai = new OpenAI({
@@ -33,8 +33,8 @@ export class OpenAIService {
         audioFeatures
       };
       
-    } catch (error) {
-      logger.error('OpenAI analysis failed:', error);
+    } catch (error: unknown) {
+      logger.error('OpenAI analysis failed:', (error as Error).message);
       throw new Error(`Audio analysis failed: ${error.message}`);
     }
   }
@@ -68,8 +68,8 @@ export class OpenAIService {
       
       return features;
       
-    } catch (error) {
-      logger.error('Whisper analysis failed:', error);
+    } catch (error: unknown) {
+      logger.error('Whisper analysis failed:', (error as Error).message);
       
       // Fallback: Basic audio analysis without Whisper
       return await this.basicAudioAnalysis(audioFilePath);
@@ -220,7 +220,7 @@ Based on these features, classify the chick as male or female with your confiden
     if (!segments || segments.length === 0) return 20; // Default moderate noise
     
     // Lower confidence often indicates more noise
-    const avgConfidence = segments.reduce((sum, s) => 
+    const avgConfidence = segments.reduce((sum: number, s: any) => 
       sum + Math.exp(s.avg_logprob || -1), 0) / segments.length;
     
     return Math.max(0, Math.min(100, (1 - avgConfidence) * 100));
@@ -331,7 +331,7 @@ Based on ${validatedSamples.length} validated samples from this farm:
   /**
    * Calculate average features
    */
-  private static calculateAverageFeatures(features: any[]): any {
+  public static calculateAverageFeatures(features: any[]): any {
     if (features.length === 0) return {};
     
     const avg: any = {};
@@ -372,8 +372,8 @@ Based on ${validatedSamples.length} validated samples from this farm:
               audioFile,
               ...analysis
             };
-          } catch (error) {
-            logger.error(`Failed to analyze ${audioFile}:`, error);
+          } catch (error: unknown) {
+            logger.error(`Failed to analyze ${audioFile}:`, (error as Error).message);
             return {
               audioFile,
               sex: 'male' as const, // Default

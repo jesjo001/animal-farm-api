@@ -1,6 +1,6 @@
 // src/services/modelTraining.service.ts
 
-import { BadRequestError } from '../utils/errors';
+import BadRequestError from '../utils/errors';
 import { TrainingRunModel } from '../models/TrainingRun.model';
 import { TrainingSampleModel } from '../models/TrainingSample.model';
 import { TrainingDataService } from './trainingData.service';
@@ -105,8 +105,8 @@ export class ModelTrainingService {
             confidence: analysis.confidence,
             isCorrect
           });
-        } catch (error) {
-          logger.error(`Validation failed for sample ${sample._id}:`, error);
+        } catch (error: unknown) {
+          logger.error(`Validation failed for sample ${sample._id}:`, (error as Error).message);
         }
       }
       
@@ -139,8 +139,8 @@ export class ModelTrainingService {
       
       logger.info(`Training completed for ${runId}: ${accuracy}% accuracy`);
       
-    } catch (error: any) {
-      logger.error(`Training failed for ${runId}:`, error);
+    } catch (error: unknown) {
+      logger.error(`Training failed for ${runId}:`, (error as Error).message);
       await TrainingRunModel.findByIdAndUpdate(runId, {
         status: 'failed',
         errorMessage: error.message,

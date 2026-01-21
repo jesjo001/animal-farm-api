@@ -48,6 +48,12 @@ export const authorize = (...roles: string[]) => {
         console.error('Authorization check failed: userRole is undefined or empty after trim.');
         return next(new UnauthorizedError('Insufficient permissions: Invalid user role.'));
     }
+
+    // Superadmin has access to everything
+    if (userRole === 'superadmin') {
+        console.log('User is superadmin, granting access.');
+        return next();
+    }
     
     console.log(`Checking if user role "${userRole}" is in required roles...`); 
     const isIncluded = roles.includes(userRole);

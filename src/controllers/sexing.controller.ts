@@ -37,4 +37,24 @@ export class ChickSexingController {
             next(error);
         }
     }
+
+    static async getSexingStats(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { tenantId } = req as any;
+            const stats = await ChickSexingService.getSexingStats(tenantId);
+            res.status(200).json(stats);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async getSexingBatches(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { tenantId } = req as any;
+            const batches = await ChickSexingService.getSexingBatches(tenantId);
+            res.status(200).json(batches);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

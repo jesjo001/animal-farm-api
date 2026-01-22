@@ -1,5 +1,5 @@
 // src/services/token.service.ts
-import BadRequestError from '../utils/errors';
+import { BadRequestError } from '../utils/errors';
 
 // Define a simple in-memory token store for demonstration purposes
 const tokenStore: { [key: string]: number } = {};

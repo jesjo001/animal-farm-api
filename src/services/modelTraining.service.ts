@@ -1,11 +1,11 @@
 // src/services/modelTraining.service.ts
 
-import BadRequestError from '../utils/errors';
+import { BadRequestError } from '../utils/errors';
 import { TrainingRunModel } from '../models/TrainingRun.model';
 import { TrainingSampleModel } from '../models/TrainingSample.model';
 import { TrainingDataService } from './trainingData.service';
 import { OpenAIService } from './openai.service';
-import { logger } from '../config/logger';
+import logger from '../config/logger';
 
 // Define TrainingParams interface
 export interface TrainingParams {

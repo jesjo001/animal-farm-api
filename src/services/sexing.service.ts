@@ -2,10 +2,10 @@
 
 import { OpenAIService } from './openai.service';
 import { TokenService } from './token.service';
-import BadRequestError from '../utils/errors';
+import { BadRequestError } from '../utils/errors';
 import { ChickSexingBatchModel } from '../models/ChickSexingBatch.model';
 import { ChickSexingResultModel } from '../models/ChickSexingResult.model';
-import { logger } from '../config/logger';
+import logger from '../config/logger';
 
 // DTO definition
 export interface CreateBatchDTO {
@@ -201,11 +201,58 @@ export class ChickSexingService {
     }
   }
 
-  private static async handleBatchError(batchId: string, error: Error) {
+  private static async handleBatchError(batchId: string, error: unknown) {
     const batch = await ChickSexingBatchModel.findById(batchId);
     if(batch){
         batch.status = 'failed';
         await batch.save();
     }
+  }
+
+  static async getSexingStats(tenantId: string) {
+    // Mock data for now
+    return {
+      totalAnalyzed: 1250,
+      totalBatches: 25,
+      maleCount: 600,
+      femaleCount: 650,
+      avgConfidence: 92.5,
+    };
+  }
+
+  static async getSexingBatches(tenantId: string) {
+    // Mock data for now
+    return [
+      {
+        _id: "63a0c6b0b5f5a6a7c8d9e0f1",
+        name: "Morning Batch - Farm A",
+        totalAnalyzed: 150,
+        maleCount: 70,
+        femaleCount: 80,
+        avgConfidence: 91.2,
+        status: "completed",
+        createdAt: new Date("2023-12-20T09:00:00Z"),
+      },
+      {
+        _id: "63a0c6b0b5f5a6a7c8d9e0f2",
+        name: "Afternoon Batch - Farm A",
+        totalAnalyzed: 200,
+        maleCount: 95,
+        femaleCount: 105,
+        avgConfidence: 94.5,
+        status: "completed",
+        createdAt: new Date("2023-12-20T14:30:00Z"),
+      },
+      {
+        _id: "63a0c6b0b5f5a6a7c8d9e0f3",
+        name: "Morning Batch - Farm B",
+        totalAnalyzed: 120,
+        maleCount: 65,
+        femaleCount: 55,
+        avgConfidence: 89.8,
+        status: "processing",
+        createdAt: new Date("2023-12-21T09:30:00Z"),
+      },
+    ];
   }
 }

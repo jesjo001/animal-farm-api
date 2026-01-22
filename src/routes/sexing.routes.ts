@@ -32,4 +32,14 @@ router.post(
     ChickSexingController.analyzeBatch
 );
 
+router.get(
+    '/stats',
+    ChickSexingController.getSexingStats
+);
+
+router.get(
+    '/batches',
+    ChickSexingController.getSexingBatches
+);
+
 export default router;

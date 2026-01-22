@@ -7,10 +7,6 @@ export interface IReferral extends Document {
     createdAt: Date;
     updatedAt: Date;
 }
-declare const Referral: mongoose.Model<IReferral, {}, {}, {}, mongoose.Document<unknown, {}, IReferral, {}, {}> & IReferral & Required<{
-    _id: mongoose.Types.ObjectId;
-}> & {
-    __v: number;
-}, any>;
+declare const Referral: mongoose.Model<any, {}, {}, {}, any, any>;
 export default Referral;
 //# sourceMappingURL=Referral.model.d.ts.map

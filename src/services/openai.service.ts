@@ -35,7 +35,7 @@ export class OpenAIService {
       
     } catch (error: unknown) {
       logger.error('OpenAI analysis failed:', (error as Error).message);
-      throw new Error(`Audio analysis failed: ${error.message}`);
+      throw new Error(`Audio analysis failed: ${(error as Error).message}`);
     }
   }
   
@@ -234,8 +234,8 @@ Based on these features, classify the chick as male or female with your confiden
     
     // Calculate variation in segment probabilities (proxy for energy variation)
     const probs = segments.map(s => Math.exp(s.avg_logprob || -1));
-    const mean = probs.reduce((a, b) => a + b, 0) / probs.length;
-    const variance = probs.reduce((sum, p) => sum + Math.pow(p - mean, 2), 0) / probs.length;
+    const mean = probs.reduce((a: number, b: number) => a + b, 0) / probs.length;
+    const variance = probs.reduce((sum: number, p: number) => sum + Math.pow(p - mean, 2), 0) / probs.length;
     
     return Math.sqrt(variance);
   }
@@ -248,8 +248,8 @@ Based on these features, classify the chick as male or female with your confiden
     
     // Variation in segment durations (proxy for frequency changes)
     const durations = segments.map(s => s.end - s.start);
-    const mean = durations.reduce((a, b) => a + b, 0) / durations.length;
-    const variance = durations.reduce((sum, d) => sum + Math.pow(d - mean, 2), 0) / durations.length;
+    const mean = durations.reduce((a: number, b: number) => a + b, 0) / durations.length;
+    const variance = durations.reduce((sum: number, d: number) => sum + Math.pow(d - mean, 2), 0) / durations.length;
     
     return Math.sqrt(variance);
   }
@@ -271,7 +271,7 @@ Based on these features, classify the chick as male or female with your confiden
     
     // Calculate basic features
     const samples = result.channelData[0];
-    const avgAmplitude = samples.reduce((sum, s) => sum + Math.abs(s), 0) / samples.length;
+    const avgAmplitude = samples.reduce((sum: number, s: number) => sum + Math.abs(s), 0) / samples.length;
     
     return {
       duration,
@@ -340,7 +340,7 @@ Based on ${validatedSamples.length} validated samples from this farm:
     keys.forEach(key => {
       const values = features.map(f => f[key]).filter(v => typeof v === 'number');
       avg[key] = values.length > 0 
-        ? values.reduce((a, b) => a + b, 0) / values.length 
+        ? values.reduce((a: number, b: number) => a + b, 0) / values.length 
         : 0;
     });
     
@@ -378,7 +378,7 @@ Based on ${validatedSamples.length} validated samples from this farm:
               audioFile,
               sex: 'male' as const, // Default
               confidence: 0,
-              reasoning: `Analysis failed: ${error.message}`,
+              reasoning: `Analysis failed: ${(error as Error).message}`,
               audioFeatures: {}
             };
           }

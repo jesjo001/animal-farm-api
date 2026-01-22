@@ -56,6 +56,6 @@ const referralSchema = new mongoose_1.Schema({
 });
 referralSchema.index({ referrer: 1 });
 referralSchema.index({ referred: 1 });
-const Referral = mongoose_1.default.model('Referral', referralSchema);
+const Referral = mongoose_1.default.models.Referral || mongoose_1.default.model('Referral', referralSchema);
 exports.default = Referral;
 //# sourceMappingURL=Referral.model.js.map

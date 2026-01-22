@@ -5,17 +5,9 @@ export declare class ReferralService {
     constructor(userRepository: BaseRepository<IUser>);
     generateReferralCode(userId: string): Promise<string>;
     getReferralDashboard(userId: string): Promise<{
-        referredUsers: (import("mongoose").Document<unknown, {}, import("../models/Referral.model").IReferral, {}, {}> & import("../models/Referral.model").IReferral & Required<{
-            _id: import("mongoose").Types.ObjectId;
-        }> & {
-            __v: number;
-        })[];
-        totalEarnings: number;
-        commissions: (import("mongoose").Document<unknown, {}, import("../models/Commission.model").ICommission, {}, {}> & import("../models/Commission.model").ICommission & Required<{
-            _id: import("mongoose").Types.ObjectId;
-        }> & {
-            __v: number;
-        })[];
+        referredUsers: any[];
+        totalEarnings: any;
+        commissions: any[];
     }>;
     private generateCode;
 }

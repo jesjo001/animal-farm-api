@@ -10,10 +10,6 @@ export interface ICommission extends Document {
     createdAt: Date;
     updatedAt: Date;
 }
-declare const Commission: mongoose.Model<ICommission, {}, {}, {}, mongoose.Document<unknown, {}, ICommission, {}, {}> & ICommission & Required<{
-    _id: mongoose.Types.ObjectId;
-}> & {
-    __v: number;
-}, any>;
+declare const Commission: mongoose.Model<any, {}, {}, {}, any, any>;
 export default Commission;
 //# sourceMappingURL=Commission.model.d.ts.map

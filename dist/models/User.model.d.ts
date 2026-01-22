@@ -5,7 +5,7 @@ export interface IUser extends Document {
     name: string;
     email: string;
     password: string;
-    role: 'tenant_admin' | 'manager' | 'worker';
+    role: 'superadmin' | 'tenant_admin' | 'manager' | 'worker';
     isActive: boolean;
     lastLogin?: Date;
     createdAt: Date;

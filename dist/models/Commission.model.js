@@ -64,6 +64,6 @@ const commissionSchema = new mongoose_1.Schema({
 });
 commissionSchema.index({ referrer: 1 });
 commissionSchema.index({ referred: 1 });
-const Commission = mongoose_1.default.model('Commission', commissionSchema);
+const Commission = mongoose_1.default.models.Commission || mongoose_1.default.model('Commission', commissionSchema);
 exports.default = Commission;
 //# sourceMappingURL=Commission.model.js.map

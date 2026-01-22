@@ -17,6 +17,7 @@ const location_routes_1 = __importDefault(require("./location.routes"));
 const payment_routes_1 = __importDefault(require("./payment.routes"));
 const subscription_routes_1 = __importDefault(require("./subscription.routes"));
 const referral_routes_1 = __importDefault(require("./referral.routes"));
+const sexing_routes_1 = __importDefault(require("./sexing.routes"));
 const router = (0, express_1.Router)();
 // API routes
 router.use('/auth', auth_routes_1.default);
@@ -32,6 +33,7 @@ router.use('/locations', location_routes_1.default);
 router.use('/payments', payment_routes_1.default);
 router.use('/subscriptions', subscription_routes_1.default);
 router.use('/referrals', referral_routes_1.default);
+router.use('/sexing', sexing_routes_1.default);
 // Health check
 router.get('/health', (req, res) => {
     res.json({

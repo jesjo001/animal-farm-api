@@ -143,7 +143,7 @@ export class ModelTrainingService {
       logger.error(`Training failed for ${runId}:`, (error as Error).message);
       await TrainingRunModel.findByIdAndUpdate(runId, {
         status: 'failed',
-        errorMessage: error.message,
+        errorMessage: (error as Error).message,
         endTime: new Date()
       });
     }

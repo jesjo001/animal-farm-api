@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.InternalServerError = exports.ConflictError = exports.NotFoundError = exports.ForbiddenError = exports.UnauthorizedError = exports.ValidationError = exports.AppError = void 0;
+exports.BadRequestError = exports.InternalServerError = exports.ConflictError = exports.NotFoundError = exports.ForbiddenError = exports.UnauthorizedError = exports.ValidationError = exports.AppError = void 0;
 class AppError extends Error {
     constructor(message, statusCode) {
         super(message);
@@ -46,4 +46,10 @@ class InternalServerError extends AppError {
     }
 }
 exports.InternalServerError = InternalServerError;
+class BadRequestError extends AppError {
+    constructor(message = 'Bad Request') {
+        super(message, 400);
+    }
+}
+exports.BadRequestError = BadRequestError;
 //# sourceMappingURL=errors.js.map

@@ -13,6 +13,7 @@ import paymentRoutes from './payment.routes';
 import subscriptionRoutes from './subscription.routes';
 import referralRoutes from './referral.routes';
 import sexingRoutes from './sexing.routes';
+import trainingRoutes from './training.routes';
 
 const router = Router();
 
@@ -31,6 +32,7 @@ router.use('/payments', paymentRoutes);
 router.use('/subscriptions', subscriptionRoutes);
 router.use('/referrals', referralRoutes);
 router.use('/sexing', sexingRoutes);
+router.use('/training', trainingRoutes);
 
 // Health check
 router.get('/health', (req, res) => {

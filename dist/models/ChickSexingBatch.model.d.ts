@@ -1,6 +1,7 @@
 import { Schema, Document } from 'mongoose';
 export interface IChickSexingBatch extends Document {
     tenantId: Schema.Types.ObjectId;
+    name: string;
     totalAnalyzed: number;
     maleCount: number;
     femaleCount: number;

@@ -11,6 +11,7 @@ const errors_1 = require("../utils/errors");
 const ChickSexingBatch_model_1 = require("../models/ChickSexingBatch.model");
 const ChickSexingResult_model_1 = require("../models/ChickSexingResult.model");
 const logger_1 = __importDefault(require("../config/logger"));
+const mongoose_1 = __importDefault(require("mongoose"));
 class ChickSexingService {
     /**
      * Analyze single chick using OpenAI
@@ -147,49 +148,59 @@ class ChickSexingService {
         }
     }
     static async getSexingStats(tenantId) {
-        // Mock data for now
+        const tenantObjectId = new mongoose_1.default.Types.ObjectId(tenantId);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const todayResultsPromise = ChickSexingResult_model_1.ChickSexingResultModel.aggregate([
+            {
+                $match: {
+                    tenantId: tenantObjectId,
+                    createdAt: { $gte: today, $lt: tomorrow },
+                },
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalSexedToday: { $sum: 1 },
+                    maleCount: {
+                        $sum: {
+                            $cond: [{ $eq: ['$predictedSex', 'male'] }, 1, 0],
+                        },
+                    },
+                    femaleCount: {
+                        $sum: {
+                            $cond: [{ $eq: ['$predictedSex', 'female'] }, 1, 0],
+                        },
+                    },
+                    avgConfidence: { $avg: '$confidence' },
+                },
+            },
+        ]);
+        const pendingAnalysisPromise = ChickSexingBatch_model_1.ChickSexingBatchModel.countDocuments({
+            tenantId: tenantObjectId,
+            status: 'processing',
+        });
+        const [todayStats, pendingAnalysis] = await Promise.all([
+            todayResultsPromise,
+            pendingAnalysisPromise,
+        ]);
+        const stats = todayStats[0] || {};
         return {
-            totalAnalyzed: 1250,
-            totalBatches: 25,
-            maleCount: 600,
-            femaleCount: 650,
-            avgConfidence: 92.5,
+            totalSexedToday: stats.totalSexedToday || 0,
+            maleCount: stats.maleCount || 0,
+            femaleCount: stats.femaleCount || 0,
+            accuracyRate: stats.avgConfidence ? parseFloat(stats.avgConfidence.toFixed(1)) : 100,
+            pendingAnalysis: pendingAnalysis || 0,
         };
     }
     static async getSexingBatches(tenantId) {
-        // Mock data for now
-        return [
-            {
-                _id: "63a0c6b0b5f5a6a7c8d9e0f1",
-                name: "Morning Batch - Farm A",
-                totalAnalyzed: 150,
-                maleCount: 70,
-                femaleCount: 80,
-                avgConfidence: 91.2,
-                status: "completed",
-                createdAt: new Date("2023-12-20T09:00:00Z"),
-            },
-            {
-                _id: "63a0c6b0b5f5a6a7c8d9e0f2",
-                name: "Afternoon Batch - Farm A",
-                totalAnalyzed: 200,
-                maleCount: 95,
-                femaleCount: 105,
-                avgConfidence: 94.5,
-                status: "completed",
-                createdAt: new Date("2023-12-20T14:30:00Z"),
-            },
-            {
-                _id: "63a0c6b0b5f5a6a7c8d9e0f3",
-                name: "Morning Batch - Farm B",
-                totalAnalyzed: 120,
-                maleCount: 65,
-                femaleCount: 55,
-                avgConfidence: 89.8,
-                status: "processing",
-                createdAt: new Date("2023-12-21T09:30:00Z"),
-            },
-        ];
+        const tenantObjectId = new mongoose_1.default.Types.ObjectId(tenantId);
+        const batches = await ChickSexingBatch_model_1.ChickSexingBatchModel.find({ tenantId: tenantObjectId })
+            .sort({ createdAt: -1 })
+            .limit(50);
+        return batches;
     }
 }
 exports.ChickSexingService = ChickSexingService;

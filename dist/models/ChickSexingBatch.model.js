@@ -4,6 +4,7 @@ exports.ChickSexingBatchModel = void 0;
 const mongoose_1 = require("mongoose");
 const ChickSexingBatchSchema = new mongoose_1.Schema({
     tenantId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Tenant', required: true },
+    name: { type: String, required: true },
     totalAnalyzed: { type: Number, default: 0 },
     maleCount: { type: Number, default: 0 },
     femaleCount: { type: Number, default: 0 },

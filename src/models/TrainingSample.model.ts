@@ -7,6 +7,8 @@ export interface ITrainingSample extends Document {
   isValidated: boolean;
   features: any;
   audioUrl: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const TrainingSampleSchema = new Schema({

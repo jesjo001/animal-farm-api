@@ -52,6 +52,8 @@ export interface CreateTransactionDTO {
   date: Date;
   category: string;
   productType?: string;
+  purpose?: 'token_purchase' | 'subscription' | 'general';
+  tokenAmount?: number;
   description?: string;
   animalId?: string;
   // Payment gateway fields
@@ -90,6 +92,8 @@ export interface PaymentData {
   userId: string;
   transactionType?: 'income' | 'expense';
   category?: string;
+  purchaseType?: 'token' | 'subscription' | 'general';
+  tokenAmount?: number;
 }
 
 export interface ChangePasswordDTO {

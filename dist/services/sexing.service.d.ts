@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 export interface CreateBatchDTO {
     name?: string;
 }
@@ -32,21 +33,16 @@ export declare class ChickSexingService {
     private static finalizeBatch;
     private static handleBatchError;
     static getSexingStats(tenantId: string): Promise<{
-        totalAnalyzed: number;
-        totalBatches: number;
-        maleCount: number;
-        femaleCount: number;
-        avgConfidence: number;
+        totalSexedToday: any;
+        maleCount: any;
+        femaleCount: any;
+        accuracyRate: number;
+        pendingAnalysis: number;
     }>;
-    static getSexingBatches(tenantId: string): Promise<{
-        _id: string;
-        name: string;
-        totalAnalyzed: number;
-        maleCount: number;
-        femaleCount: number;
-        avgConfidence: number;
-        status: string;
-        createdAt: Date;
-    }[]>;
+    static getSexingBatches(tenantId: string): Promise<(mongoose.Document<unknown, {}, import("../models/ChickSexingBatch.model").IChickSexingBatch, {}, {}> & import("../models/ChickSexingBatch.model").IChickSexingBatch & Required<{
+        _id: mongoose.Types.ObjectId;
+    }> & {
+        __v: number;
+    })[]>;
 }
 //# sourceMappingURL=sexing.service.d.ts.map

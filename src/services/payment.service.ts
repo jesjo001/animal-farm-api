@@ -5,6 +5,7 @@ import { env } from '../config/env';
 import User from '../models/User.model';
 import Commission from '../models/Commission.model';
 import Transaction from '../models/Transaction.model';
+import { TokenService } from './token.service';
 
 export interface PaymentData {
   amount: number;
@@ -18,6 +19,8 @@ export interface PaymentData {
   userId: string;
   transactionType?: 'income' | 'expense';
   category?: string;
+  purchaseType?: 'token' | 'subscription' | 'general';
+  tokenAmount?: number;
 }
 
 export interface PaymentResponse {
@@ -51,6 +54,10 @@ export async function initiatePayment(
         phonenumber: paymentData.customerPhone || '',
         name: paymentData.customerName,
       },
+      meta: {
+        purchaseType: paymentData.purchaseType || 'general',
+        tokenAmount: paymentData.tokenAmount || 0,
+      },
       customizations: {
         title: 'FarmFlow Payment',
         description: paymentData.paymentDescription,
@@ -76,7 +83,13 @@ export async function initiatePayment(
         transactionType: paymentData.transactionType || 'income',
         amount: paymentData.amount,
         date: new Date(),
-        category: paymentData.category || 'Payment',
+        category: paymentData.category || (paymentData.purchaseType === 'token' ? 'Token Purchase' : 'Payment'),
+        purpose: paymentData.purchaseType === 'token'
+          ? 'token_purchase'
+          : paymentData.purchaseType === 'subscription'
+            ? 'subscription'
+            : 'general',
+        tokenAmount: paymentData.tokenAmount,
         description: paymentData.paymentDescription,
         paymentMethod: 'flutterwave' as const,
         paymentStatus: 'pending' as const,
@@ -130,6 +143,8 @@ export async function verifyPayment(
         throw new Error('Transaction not found for payment verification');
       }
 
+      const wasCompleted = transaction.paymentStatus === 'completed';
+
       // Update transaction status
       await transactionService.updateTransaction(
         transaction._id.toString(),
@@ -140,6 +155,10 @@ export async function verifyPayment(
         transaction.tenantId.toString(),
         transaction.recordedBy.toString()
       );
+
+      if (!wasCompleted && transaction.tokenAmount && transaction.tokenAmount > 0) {
+        await TokenService.addTokens(transaction.tenantId.toString(), transaction.tokenAmount);
+      }
 
       // Handle referral commission
       const user = await User.findById(transaction.recordedBy);
@@ -191,123 +210,58 @@ export async function verifyPayment(
 }
 
 export async function handleWebhook(
-
   payload: any,
-
   transactionService: TransactionService
-
 ): Promise<void> {
-
   try {
-
-    // TODO: Verify webhook signature (implement based on Flutterwave docs)
-
-    const secretHash = env.FLUTTERWAVE_SECRET_HASH;
-
-    // Add signature verification logic here
-
-
-
     const { event, data } = payload;
 
-
-
     if (event === 'charge.completed' && data.status === 'successful') {
-
       const tx_ref = data.tx_ref;
-
       const transaction = await Transaction.findOne({ paymentReference: tx_ref });
 
-
-
       if (!transaction) {
-
         // This should not happen in a normal flow
-
         console.error('Transaction not found for webhook processing');
-
         return;
-
       }
 
-
+      const wasCompleted = transaction.paymentStatus === 'completed';
 
       // Update transaction status
-
       await transactionService.updateTransaction(
-
         transaction._id.toString(),
-
         {
-
           paymentStatus: 'completed',
-
           paymentId: data.id.toString(),
-
         },
-
         transaction.tenantId.toString(),
-
         transaction.recordedBy.toString()
-
       );
 
-
-
-            // Handle referral commission
-
-
-
-            const user = await User.findById(transaction.recordedBy);
-
-
-
-            if (user && user.referrer && data) {
-
-
-
-              const webhookData: any = data; // Explicitly cast to any
-
-
-
-              const commissionRate = 0.20; // 20%
-
-
-
-              const commissionAmount = (webhookData.amount || 0) * commissionRate;
-
-
-
-      
-
-
-
-              await Commission.create({
-
-
-
-                referrer: user.referrer,
-
-          referred: user._id,
-
-          transaction: transaction._id,
-
-          amount: commissionAmount,
-
-          commissionRate: commissionRate,
-
-        });
-
+      if (!wasCompleted && transaction.tokenAmount && transaction.tokenAmount > 0) {
+        await TokenService.addTokens(transaction.tenantId.toString(), transaction.tokenAmount);
       }
 
+      // Handle referral commission
+      const user = await User.findById(transaction.recordedBy);
+      if (user && user.referrer && data) {
+        const webhookData: any = data; // Explicitly cast to any
+        const commissionRate = 0.20; // 20%
+        const commissionAmount = (webhookData.amount || 0) * commissionRate;
+
+        await Commission.create({
+          referrer: user.referrer,
+          referred: user._id,
+          transaction: transaction._id,
+          amount: commissionAmount,
+          commissionRate: commissionRate,
+        });
+      }
     }
-
   } catch (error) {
-
     console.error('Webhook handling error:', error);
-
   }
-
 }
 
 

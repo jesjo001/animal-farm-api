@@ -2,6 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface IChickSexingBatch extends Document {
   tenantId: Schema.Types.ObjectId;
+  name: string;
   totalAnalyzed: number;
   maleCount: number;
   femaleCount: number;
@@ -12,6 +13,7 @@ export interface IChickSexingBatch extends Document {
 
 const ChickSexingBatchSchema = new Schema({
   tenantId: { type: Schema.Types.ObjectId, ref: 'Tenant', required: true },
+  name: { type: String, required: true },
   totalAnalyzed: { type: Number, default: 0 },
   maleCount: { type: Number, default: 0 },
   femaleCount: { type: Number, default: 0 },

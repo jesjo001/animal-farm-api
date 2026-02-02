@@ -8,6 +8,8 @@ export interface ITransaction extends Document {
   date: Date;
   category: string;
   productType?: string; // For income: egg sales, meat sales, etc.
+  purpose?: 'token_purchase' | 'subscription' | 'general';
+  tokenAmount?: number;
   description?: string;
   animalId?: mongoose.Types.ObjectId; // For animal-specific transactions
   recordedBy: mongoose.Types.ObjectId;
@@ -50,6 +52,15 @@ const transactionSchema = new Schema<ITransaction>({
   productType: {
     type: String,
     trim: true,
+  },
+  purpose: {
+    type: String,
+    enum: ['token_purchase', 'subscription', 'general'],
+    default: 'general',
+  },
+  tokenAmount: {
+    type: Number,
+    min: 0,
   },
   description: {
     type: String,
